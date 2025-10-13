@@ -3,7 +3,6 @@ echo ========================================
 echo Ball Sort Puzzle - Android Conversion
 echo ========================================
 echo.
-
 REM Check if required tools are installed
 echo [1/8] Checking prerequisites...
 
@@ -81,8 +80,8 @@ if %errorlevel% neq 0 (
 
 echo [4/8] Copying game files...
 
-REM Copy game files to www directory
-copy "..\index.html" "www\index.html" /Y
+REM Copy game files to www directory (use mobile-optimized HTML)
+copy "..\index-mobile.html" "www\index.html" /Y
 copy "..\game.js" "www\game.js" /Y
 copy "..\user-progress.js" "www\user-progress.js" /Y
 copy "..\styles.css" "www\styles.css" /Y
