@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Expression Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-level { margin: 15px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .color-result { display: inline-block; margin: 5px; padding: 8px 12px; 
+                       background: #f0f0f0; border-radius: 4px; font-family: monospace; }
+        .color-0 { background-color: #FF3B30; color: white; }
+        .color-1 { background-color: #FF9500; color: white; }
+        .color-2 { background-color: #FFCC02; color: black; }
+        .color-3 { background-color: #34C759; color: white; }
+        .color-4 { background-color: #00C7BE; color: white; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; 
+                border-radius: 5px; cursor: pointer; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🎮 Quick Expression Test</h1>
+    <button onclick="runTest()">Test Expression Generation</button>
+    <div id="results"></div>
+
+    <script src="src/js/ball-expressions.js"></script>
+    <script>
+        function runTest() {
+            const results = document.getElementById('results');
+            const system = new BallExpressionSystem();
+            
+            let html = '<h2>Expression Test Results</h2>';
+            
+            // Test first 5 levels with 5 colors each
+            for (let level = 1; level <= 5; level++) {
+                html += `<div class="test-level">
+                    <h3>Level ${level}</h3>`;
+                
+                const expressions = [];
+                for (let color = 0; color < 5; color++) {
+                    const expression = system.getExpressionForColor(level, color);
+                    expressions.push(expression);
+                    html += `<span class="color-result color-${color}">Color ${color}: ${expression}</span>`;
+                }
+                
+                // Check for variety
+                const uniqueExpressions = [...new Set(expressions)];
+                const varietyGood = uniqueExpressions.length >= Math.min(3, expressions.length);
+                
+                html += `<br><strong>Variety: ${uniqueExpressions.length}/${expressions.length} unique expressions ${varietyGood ? '✅' : '❌'}</strong>`;
+                html += '</div>';
+            }
+            
+            // Test some higher levels
+            html += '<h2>Higher Level Samples</h2>';
+            const testLevels = [10, 25, 50, 100, 500];
+            
+            for (let level of testLevels) {
+                html += `<div class="test-level">
+                    <h3>Level ${level}</h3>`;
+                
+                for (let color = 0; color < 5; color++) {
+                    const expression = system.getExpressionForColor(level, color);
+                    html += `<span class="color-result color-${color}">Color ${color}: ${expression}</span>`;
+                }
+                html += '</div>';
+            }
+            
+            results.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

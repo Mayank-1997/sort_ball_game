@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Tube Design Validation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        canvas {
+            border: 2px solid #ddd;
+            margin: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Quick Tube Design Validation</h1>
+    
+    <div class="test-container">
+        <h2>System Status</h2>
+        <div id="systemStatus"></div>
+        <button onclick="runQuickTest()">Run Quick Test</button>
+        <button onclick="testLevelProgression()">Test Level Progression</button>
+    </div>
+    
+    <div class="test-container">
+        <h2>Visual Verification</h2>
+        <button onclick="showTubeDesigns()">Show All Tube Designs</button>
+        <div id="visualTest"></div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Game Integration Test</h2>
+        <button onclick="simulateGameLevels()">Simulate Game Levels</button>
+        <div id="gameTest"></div>
+    </div>
+
+    <!-- Load tube design system -->
+    <script src="../src/js/tube-designs.js"></script>
+    <script src="../src/js/tube-drawing.js"></script>
+
+    <script>
+        let tubeSystem;
+
+        function initialize() {
+            const status = document.getElementById('systemStatus');
+            
+            try {
+                tubeSystem = new TubeDesignSystem();
+                window.tubeDesignSystem = tubeSystem;
+                
+                status.innerHTML = `
+                    <div class="info">
+                        ✅ TubeDesignSystem: Initialized<br>
+                        ✅ Available designs: ${tubeSystem.getAllTubeDesigns().join(', ')}<br>
+                        ✅ drawTubeWithDesign: ${typeof drawTubeWithDesign !== 'undefined' ? 'Available' : 'Missing'}<br>
+                        ✅ System ready for testing
+                    </div>
+                `;
+            } catch (error) {
+                status.innerHTML = `
+                    <div class="info" style="background: #ffebee; color: #c62828;">
+                        ❌ Initialization failed: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function runQuickTest() {
+            if (!tubeSystem) return;
+            
+            const status = document.getElementById('systemStatus');
+            
+            // Test basic functionality
+            const results = [];
+            
+            try {
+                // Test 1: Design assignment
+                const design1 = tubeSystem.getTubeDesignForIndex(1, 0);
+                const design2 = tubeSystem.getTubeDesignForIndex(1, 1);
+                results.push(`Level 1: T0=${design1}, T1=${design2}`);
+                
+                // Test 2: Level designs
+                const levelDesigns = tubeSystem.generateLevelTubeDesigns(3, 6);
+                results.push(`Level 3 designs: ${JSON.stringify(levelDesigns)}`);
+                
+                // Test 3: Variety check
+                const uniqueDesigns = new Set(Object.values(levelDesigns));
+                results.push(`Unique designs in level: ${uniqueDesigns.size}/7`);
+                
+                status.innerHTML += `
+                    <div class="info">
+                        📊 Quick Test Results:<br>
+                        ${results.join('<br>')}
+                    </div>
+                `;
+            } catch (error) {
+                status.innerHTML += `
+                    <div class="info" style="background: #ffebee;">
+                        ❌ Test failed: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function testLevelProgression() {
+            if (!tubeSystem) return;
+            
+            const container = document.getElementById('systemStatus');
+            const progressionData = [];
+            
+            // Test multiple levels
+            for (let level = 1; level <= 10; level++) {
+                const designs = tubeSystem.generateLevelTubeDesigns(level, 8);
+                const uniqueCount = new Set(Object.values(designs)).size;
+                progressionData.push(`L${level}: ${uniqueCount} unique`);
+            }
+            
+            container.innerHTML += `
+                <div class="info">
+                    🎲 Level Progression Test:<br>
+                    ${progressionData.join(', ')}
+                </div>
+            `;
+        }
+
+        function showTubeDesigns() {
+            if (!tubeSystem) return;
+            
+            const container = document.getElementById('visualTest');
+            container.innerHTML = '';
+            
+            const designs = tubeSystem.getAllTubeDesigns();
+            const canvas = document.createElement('canvas');
+            canvas.width = designs.length * 80;
+            canvas.height = 180;
+            
+            const ctx = canvas.getContext('2d');
+            
+            designs.forEach((design, index) => {
+                const x = index * 80 + 10;
+                const y = 10;
+                
+                try {
+                    if (typeof drawTubeWithDesign === 'function') {
+                        drawTubeWithDesign(ctx, x, y, 50, 120, design);
+                    } else {
+                        // Simple fallback
+                        ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                        ctx.fillRect(x, y, 50, 120);
+                        ctx.strokeStyle = '#333';
+                        ctx.strokeRect(x, y, 50, 120);
+                    }
+                    
+                    // Label
+                    ctx.fillStyle = '#333';
+                    ctx.font = '11px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(design, x + 25, y + 145);
+                } catch (error) {
+                    console.error(`Error drawing ${design}:`, error);
+                    ctx.fillStyle = 'red';
+                    ctx.fillRect(x, y, 50, 120);
+                }
+            });
+            
+            container.appendChild(canvas);
+        }
+
+        function simulateGameLevels() {
+            if (!tubeSystem) return;
+            
+            const container = document.getElementById('gameTest');
+            container.innerHTML = '<h3>Game Level Simulation</h3>';
+            
+            // Simulate typical game scenarios
+            const scenarios = [
+                { level: 1, tubes: 5, name: 'Early Level' },
+                { level: 10, tubes: 7, name: 'Mid Level' },
+                { level: 50, tubes: 9, name: 'Advanced Level' },
+                { level: 100, tubes: 11, name: 'Expert Level' }
+            ];
+            
+            scenarios.forEach(scenario => {
+                const designs = tubeSystem.generateLevelTubeDesigns(scenario.level, scenario.tubes);
+                const designList = Object.values(designs);
+                const uniqueCount = new Set(designList).size;
+                
+                container.innerHTML += `
+                    <div class="info">
+                        <strong>${scenario.name} (Level ${scenario.level}):</strong><br>
+                        Tubes: ${scenario.tubes} | Unique designs: ${uniqueCount}<br>
+                        Design sequence: ${designList.join(' → ')}
+                    </div>
+                `;
+            });
+        }
+
+        // Auto-initialize when page loads
+        window.addEventListener('load', initialize);
+    </script>
+</body>
+</html>

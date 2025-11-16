@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tube Design System Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        canvas {
+            border: 2px solid #ddd;
+            margin: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .design-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .design-info {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+            font-family: monospace;
+        }
+        .level-test {
+            background: #e3f2fd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Tube Design System Validator</h1>
+    <p>Testing different tube designs and their rendering</p>
+
+    <div class="test-section">
+        <h2>📋 All Available Tube Designs</h2>
+        <div id="allDesignsTest"></div>
+        <div class="design-grid" id="designGrid"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎲 Level-based Tube Design Assignment</h2>
+        <button onclick="testLevelDesigns()">Test Different Levels</button>
+        <button onclick="testTubeVariety()">Test Tube Variety in Level</button>
+        <div id="levelTests"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎨 Visual Tube Design Showcase</h2>
+        <button onclick="showAllDesigns()">Show All Designs</button>
+        <div id="visualShowcase"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Test Results</h2>
+        <div id="testResults"></div>
+    </div>
+
+    <!-- Load the tube design system -->
+    <script src="../src/js/tube-designs.js"></script>
+    <script src="../src/js/tube-drawing.js"></script>
+
+    <script>
+        let tubeDesignSystem;
+        let testResults = [];
+
+        function initializeSystem() {
+            try {
+                tubeDesignSystem = new TubeDesignSystem();
+                window.tubeDesignSystem = tubeDesignSystem;
+                console.log('✅ Tube Design System initialized');
+                return true;
+            } catch (error) {
+                console.error('❌ Failed to initialize Tube Design System:', error);
+                document.getElementById('testResults').innerHTML += 
+                    `<div style="color: red;">❌ System initialization failed: ${error.message}</div>`;
+                return false;
+            }
+        }
+
+        function testBasicFunctionality() {
+            if (!tubeDesignSystem) return false;
+
+            const results = [];
+            
+            // Test 1: Get all designs
+            try {
+                const designs = tubeDesignSystem.getAllTubeDesigns();
+                results.push(`✅ Found ${designs.length} tube designs: ${designs.join(', ')}`);
+                
+                document.getElementById('allDesignsTest').innerHTML = 
+                    `<div class="design-info">Available designs: ${designs.join(', ')}</div>`;
+            } catch (error) {
+                results.push(`❌ getAllTubeDesigns failed: ${error.message}`);
+            }
+
+            // Test 2: Get design for specific tube
+            try {
+                const design1 = tubeDesignSystem.getTubeDesignForIndex(1, 0);
+                const design2 = tubeDesignSystem.getTubeDesignForIndex(1, 1);
+                results.push(`✅ Level 1 designs: Tube 0="${design1}", Tube 1="${design2}"`);
+            } catch (error) {
+                results.push(`❌ getTubeDesignForIndex failed: ${error.message}`);
+            }
+
+            // Test 3: Generate level designs
+            try {
+                const levelDesigns = tubeDesignSystem.generateLevelTubeDesigns(2, 5);
+                results.push(`✅ Level 2 (5 tubes): ${JSON.stringify(levelDesigns)}`);
+            } catch (error) {
+                results.push(`❌ generateLevelTubeDesigns failed: ${error.message}`);
+            }
+
+            document.getElementById('testResults').innerHTML = results.join('<br>');
+            return results.length > 0;
+        }
+
+        function testLevelDesigns() {
+            if (!tubeDesignSystem) return;
+
+            const container = document.getElementById('levelTests');
+            container.innerHTML = '';
+
+            for (let level = 1; level <= 10; level++) {
+                const designs = tubeDesignSystem.generateLevelTubeDesigns(level, 7);
+                const designString = Object.entries(designs)
+                    .map(([tube, design]) => `T${tube}:${design}`)
+                    .join(', ');
+                
+                container.innerHTML += 
+                    `<div class="level-test">
+                        <strong>Level ${level}:</strong> ${designString}
+                    </div>`;
+            }
+        }
+
+        function testTubeVariety() {
+            if (!tubeDesignSystem) return;
+
+            const container = document.getElementById('levelTests');
+            
+            // Test variety within a single level
+            const level = 5;
+            const designs = tubeDesignSystem.generateLevelTubeDesigns(level, 10);
+            const uniqueDesigns = new Set(Object.values(designs));
+            
+            container.innerHTML += 
+                `<div class="level-test" style="background: #fff3e0;">
+                    <strong>Variety Test (Level ${level}, 10 tubes):</strong><br>
+                    Designs used: ${Array.from(uniqueDesigns).join(', ')}<br>
+                    Unique designs: ${uniqueDesigns.size}/7 possible<br>
+                    Full mapping: ${JSON.stringify(designs)}
+                </div>`;
+        }
+
+        function showAllDesigns() {
+            if (!tubeDesignSystem) return;
+
+            const container = document.getElementById('visualShowcase');
+            container.innerHTML = '';
+
+            const designs = tubeDesignSystem.getAllTubeDesigns();
+            
+            designs.forEach(design => {
+                const canvas = document.createElement('canvas');
+                canvas.width = 100;
+                canvas.height = 200;
+                canvas.style.margin = '10px';
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Draw the tube design
+                try {
+                    if (typeof drawTubeWithDesign === 'function') {
+                        drawTubeWithDesign(ctx, 10, 10, 60, 150, design);
+                    } else {
+                        // Fallback simple drawing
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.fillRect(10, 10, 60, 150);
+                        ctx.strokeStyle = '#333';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(10, 10, 60, 150);
+                    }
+                    
+                    // Add label
+                    ctx.fillStyle = '#333';
+                    ctx.font = '12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(design, 50, 180);
+                } catch (error) {
+                    console.error(`Error drawing ${design}:`, error);
+                    ctx.fillStyle = 'red';
+                    ctx.fillRect(10, 10, 60, 150);
+                    ctx.fillStyle = 'white';
+                    ctx.font = '10px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Error', 50, 90);
+                }
+                
+                container.appendChild(canvas);
+            });
+        }
+
+        function runAllTests() {
+            console.log('🧪 Starting Tube Design System Tests...');
+            
+            if (!initializeSystem()) {
+                return;
+            }
+            
+            testBasicFunctionality();
+            testLevelDesigns();
+            
+            console.log('✅ All tests completed');
+        }
+
+        // Auto-run when page loads
+        window.addEventListener('load', runAllTests);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1605 @@
+/* Custom CSS for Ball Sort Puzzle Game */
+
+/* 3D Game Background */
+.game-background {
+    background: linear-gradient(135deg, 
+        #667eea 0%, 
+        #764ba2 25%, 
+        #f093fb 50%, 
+        #f5576c 75%, 
+        #4facfe 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.game-background::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+    animation: backgroundPulse 8s ease-in-out infinite alternate;
+    z-index: -2;
+}
+
+.game-background::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='balls' x='0' y='0' width='100' height='100' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='25' cy='25' r='8' fill='%23ffffff10'/%3E%3Ccircle cx='75' cy='75' r='6' fill='%23ffffff08'/%3E%3Crect x='45' y='10' width='10' height='30' rx='5' fill='%23ffffff06'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23balls)'/%3E%3C/svg%3E");
+    animation: backgroundFloat 12s linear infinite;
+    z-index: -1;
+    opacity: 0.7;
+}
+
+@keyframes backgroundPulse {
+    0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1.1) rotate(5deg);
+        opacity: 0.9;
+    }
+}
+
+@keyframes backgroundFloat {
+    0% {
+        transform: translateX(-100px) translateY(-100px);
+    }
+    100% {
+        transform: translateX(100px) translateY(100px);
+    }
+}
+
+/* Floating 3D Game Elements */
+.floating-elements {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.floating-ball {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ball-color, #ff6b6b) 0%, var(--ball-shadow, #ee5a52) 100%);
+    box-shadow: 
+        inset -5px -5px 10px rgba(0,0,0,0.3),
+        inset 5px 5px 10px rgba(255,255,255,0.3),
+        0 10px 20px rgba(0,0,0,0.2);
+    animation: float3d var(--duration, 8s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+}
+
+.floating-tube {
+    position: absolute;
+    background: linear-gradient(180deg, 
+        rgba(255,255,255,0.1) 0%, 
+        rgba(255,255,255,0.05) 50%, 
+        rgba(0,0,0,0.1) 100%);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 0 0 20px 20px;
+    box-shadow: 
+        inset 0 2px 10px rgba(255,255,255,0.1),
+        0 10px 30px rgba(0,0,0,0.2);
+    animation: sway var(--duration, 10s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+}
+
+@keyframes float3d {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+    }
+    25% {
+        transform: translateY(-20px) rotate(90deg) scale(1.1);
+    }
+    50% {
+        transform: translateY(-10px) rotate(180deg) scale(0.9);
+    }
+    75% {
+        transform: translateY(-30px) rotate(270deg) scale(1.05);
+    }
+}
+
+@keyframes sway {
+    0%, 100% {
+        transform: rotate(0deg) translateX(0);
+    }
+    25% {
+        transform: rotate(2deg) translateX(10px);
+    }
+    50% {
+        transform: rotate(0deg) translateX(0);
+    }
+    75% {
+        transform: rotate(-2deg) translateX(-10px);
+    }
+}
+
+/* Purchase Modal Visibility Fix */
+#purchaseModal:not(.hidden):not([style*="display: none"]) {
+    display: flex !important;
+    z-index: 9999 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#purchaseModal.hidden,
+#purchaseModal[style*="display: none"] {
+    display: none !important;
+}
+
+/* Welcome Screen Animations */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+    }
+}
+
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Game Canvas Enhancement */
+#gameCanvas {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 15px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Hide info panel completely from UI */
+#infoPanel {
+    display: none !important;
+}
+
+/* Enhanced UI Elements */
+#gameContainer .bg-white\/20 {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation utility classes */
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.animation-delay-300 {
+    animation-delay: 300ms;
+}
+
+.animation-delay-500 {
+    animation-delay: 500ms;
+}
+
+.animation-delay-1000 {
+    animation-delay: 1000ms;
+}
+
+.animation-delay-1500 {
+    animation-delay: 1500ms;
+}
+
+/* Responsive Background Elements */
+@media (max-width: 768px) {
+    .floating-elements .floating-ball {
+        transform: scale(0.7);
+    }
+    
+    .floating-elements .floating-tube {
+        transform: scale(0.8);
+    }
+    
+    .game-background::after {
+        opacity: 0.5;
+    }
+}
+
+.animation-delay-600 {
+    animation-delay: 600ms;
+}
+
+.animation-delay-900 {
+    animation-delay: 900ms;
+}
+
+.animation-delay-1000 {
+    animation-delay: 1000ms;
+}
+
+.animation-delay-1500 {
+    animation-delay: 1500ms;
+}
+
+/* Welcome screen transitions */
+#welcomeScreen {
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+#welcomeScreen.fade-out {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+/* Game container initial state */
+#gameContainer {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    display: none; /* Initially hidden */
+}
+
+#gameContainer.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+    display: block; /* Show when fading in */
+}
+
+/* Animation keyframes */
+@keyframes bounce {
+    0%, 20%, 53%, 80%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+    40%, 43% {
+        transform: translate3d(0, -10px, 0);
+    }
+    70% {
+        transform: translate3d(0, -5px, 0);
+    }
+    90% {
+        transform: translate3d(0, -2px, 0);
+    }
+}
+
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+@keyframes sparkle {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1) rotate(180deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.2) rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 40px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes timerWarning {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+}
+
+/* Utility classes */
+.bounce-animation {
+    animation: bounce 0.6s ease-in-out;
+}
+
+.shake-animation {
+    animation: shake 0.5s ease-in-out;
+}
+
+.sparkle-effect {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #ffd700, #ffec8c);
+    border-radius: 50%;
+    animation: sparkle 1s ease-in-out;
+    pointer-events: none;
+}
+
+.pulse-animation {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.timer-warning {
+    animation: timerWarning 1s ease-in-out infinite;
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Custom button styles */
+button:active {
+    transform: scale(0.95);
+}
+
+button:disabled {
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+}
+
+/* Enhanced 3D Animated Canvas Background */
+.game-canvas-container {
+    position: relative;
+    display: inline-block;
+}
+
+.game-canvas-3d-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    z-index: -1;
+    background: linear-gradient(135deg, 
+        rgba(102, 126, 234, 0.1) 0%,
+        rgba(118, 75, 162, 0.15) 25%,
+        rgba(240, 147, 251, 0.1) 50%,
+        rgba(245, 87, 108, 0.15) 75%,
+        rgba(79, 172, 254, 0.1) 100%);
+}
+
+/* Floating 3D Balls Animation */
+.floating-3d-ball {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ball-color) 0%, var(--ball-shadow) 100%);
+    box-shadow: 
+        inset -3px -3px 6px rgba(0,0,0,0.3),
+        inset 3px 3px 6px rgba(255,255,255,0.3),
+        0 0 20px rgba(var(--ball-glow), 0.4);
+    animation: float3D var(--duration, 8s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+    opacity: 0.7;
+    transform-style: preserve-3d;
+}
+
+.floating-3d-ball::before {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 25%;
+    width: 30%;
+    height: 30%;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    filter: blur(2px);
+}
+
+/* Animated 3D Tubes */
+.floating-3d-tube {
+    position: absolute;
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.2) 0%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        rgba(255, 255, 255, 0.05) 100%);
+    border: 2px solid rgba(var(--tube-color), 0.4);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 
+        inset 0 0 20px rgba(255, 255, 255, 0.1),
+        0 0 30px rgba(var(--tube-glow), 0.3);
+    animation: tube3D var(--duration, 12s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+    opacity: 0.6;
+    transform-style: preserve-3d;
+}
+
+.floating-3d-tube::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -2px;
+    right: -2px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(var(--tube-color), 0.4);
+    border-radius: 50%;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Geometric 3D Shapes */
+.floating-3d-geometry {
+    position: absolute;
+    opacity: 0.3;
+    animation: geometry3D var(--duration, 15s) linear infinite;
+    animation-delay: var(--delay, 0s);
+    transform-style: preserve-3d;
+}
+
+.geometry-cube {
+    width: var(--size, 20px);
+    height: var(--size, 20px);
+    background: linear-gradient(45deg, 
+        rgba(var(--geo-color), 0.3) 0%, 
+        rgba(var(--geo-color), 0.1) 100%);
+    border: 1px solid rgba(var(--geo-color), 0.4);
+    box-shadow: 0 0 20px rgba(var(--geo-color), 0.2);
+}
+
+.geometry-triangle {
+    width: 0;
+    height: 0;
+    border-left: calc(var(--size, 20px) / 2) solid transparent;
+    border-right: calc(var(--size, 20px) / 2) solid transparent;
+    border-bottom: var(--size, 20px) solid rgba(var(--geo-color), 0.3);
+    filter: drop-shadow(0 0 10px rgba(var(--geo-color), 0.2));
+}
+
+/* Particle System */
+.particle-system {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: var(--size, 4px);
+    height: var(--size, 4px);
+    background: radial-gradient(circle, rgba(var(--particle-color), 0.8) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: particleFloat var(--duration, 10s) linear infinite;
+    animation-delay: var(--delay, 0s);
+}
+
+/* 3D Animation Keyframes */
+@keyframes float3D {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px) rotateY(0deg) rotateX(0deg);
+    }
+    25% {
+        transform: translateY(-20px) translateX(10px) rotateY(90deg) rotateX(15deg);
+    }
+    50% {
+        transform: translateY(-40px) translateX(-5px) rotateY(180deg) rotateX(0deg);
+    }
+    75% {
+        transform: translateY(-20px) translateX(-15px) rotateY(270deg) rotateX(-15deg);
+    }
+}
+
+@keyframes tube3D {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px) rotateZ(0deg) scale(1);
+    }
+    33% {
+        transform: translateY(-30px) translateX(15px) rotateZ(5deg) scale(1.1);
+    }
+    66% {
+        transform: translateY(-60px) translateX(-10px) rotateZ(-3deg) scale(0.9);
+    }
+}
+
+@keyframes geometry3D {
+    0% {
+        transform: translateY(100%) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+        opacity: 0;
+    }
+    10%, 90% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateY(-100%) rotateX(360deg) rotateY(180deg) rotateZ(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(100vh) translateX(0px);
+        opacity: 0;
+    }
+    10%, 90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(-100px) translateX(var(--drift, 50px));
+        opacity: 0;
+    }
+}
+
+/* Canvas styling with enhanced 3D effect */
+#gameCanvas {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.05) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* TopBar overlay styling */
+#topBar {
+    position: relative;
+    z-index: 20 !important;
+}
+
+/* TopBar layout spacing */
+#topBar .space-y-4 > * + * {
+    margin-top: 1rem;
+}
+
+#topBar .space-x-4 > * + * {
+    margin-left: 1rem;
+}
+
+/* More Options Panel Styles */
+#optionsPanel {
+    transition: all 0.3s ease-in-out;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+}
+
+#optionsPanel.show {
+    max-height: 300px;
+    opacity: 1;
+}
+
+#moreOptionsBtn {
+    transition: all 0.3s ease;
+}
+
+#moreOptionsBtn:hover {
+    transform: scale(1.05);
+}
+
+#closeOptionsBtn {
+    transition: all 0.3s ease;
+}
+
+#closeOptionsBtn:hover {
+    transform: scale(1.05);
+}
+
+/* Mobile More Options Optimization */
+@media screen and (max-width: 768px) {
+    #moreOptionsBtn {
+        padding: 8px 16px;
+        font-size: 12px;
+        margin: 4px 0;
+    }
+    
+    #closeOptionsBtn {
+        padding: 6px 12px;
+        font-size: 10px;
+        margin-top: 8px;
+    }
+    
+    #optionsPanel {
+        padding: 8px;
+        margin: 0 -8px;
+    }
+    
+    #optionsPanel .space-x-4 > * + * {
+        margin-left: 8px;
+    }
+    
+    #optionsPanel .space-y-3 > * + * {
+        margin-top: 8px;
+    }
+    
+    /* Adjust button sizes in options panel for mobile */
+    #optionsPanel button {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    #optionsPanel .text-sm {
+        font-size: 10px;
+    }
+    
+    #optionsPanel .text-xs {
+        font-size: 9px;
+    }
+}
+
+#gameCanvas:hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Modal animations */
+.modal-enter {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+/* Progress bar */
+.progress-bar {
+    background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6, #f59e0b);
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    #gameContainer {
+        padding: 1rem;
+    }
+    
+    #topBar {
+        /* Default mobile behavior - but with height constraint */
+        flex-direction: column;
+        gap: 1rem;
+        max-height: 25vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    #topBar > div {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    #bottomBar {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    #bottomBar button {
+        flex: 1;
+        min-width: 120px;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Loading states */
+.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Focus styles for accessibility */
+button:focus,
+canvas:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    body {
+        background: #000;
+        color: #fff;
+    }
+    
+    .bg-white\/20 {
+        background: rgba(255, 255, 255, 0.9) !important;
+        color: #000 !important;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Banner Ad Styles */
+#bannerAdContainer {
+    position: sticky;
+    bottom: 0;
+    z-index: 40;
+    margin-bottom: 0;
+}
+
+#bannerAd {
+    width: 100%;
+    max-width: 320px;
+    min-height: 50px;
+}
+
+#bannerAdPlaceholder {
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+#bannerAdPlaceholder:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile banner optimization */
+@media screen and (max-width: 768px) {
+    #bannerAdContainer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 8px;
+        background: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+    }
+    
+    #bannerAd {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    
+    /* Adjust game container to account for banner */
+    #gameContainer {
+        padding-bottom: 80px;
+    }
+}
+
+/* Pulse animation for ads */
+@keyframes pulse-ad {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.pulse-ad {
+    animation: pulse-ad 2s infinite;
+}
+
+/* ========================================
+   MOBILE OPTIMIZATIONS
+   ======================================== */
+
+/* Prevent text selection and zoom on mobile */
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Allow text selection for specific elements */
+.selectable-text {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+/* Prevent zoom on input focus (iOS Safari fix) */
+input, select, textarea, button {
+    font-size: 16px !important;
+}
+
+/* Ensure proper mobile viewport */
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    -webkit-overflow-scrolling: touch;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Canvas mobile optimizations */
+#gameCanvas {
+    max-width: 100vw;
+    max-height: 60vh;
+    width: auto;
+    height: auto;
+    touch-action: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /* Maintain aspect ratio */
+    object-fit: contain;
+}
+
+/* Mobile-friendly button sizing */
+button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 20px;
+    touch-action: manipulation;
+    cursor: pointer;
+}
+
+/* Improve touch targets */
+.touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Status bar and notch support */
+.status-bar-padding {
+    padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-padding {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+}
+
+/* Mobile-specific animations (performance optimized) */
+@media screen and (max-width: 768px) {
+    /* Reduce animations on mobile for better performance */
+    .animate-bounce, .animate-ping, .animate-pulse {
+        animation-duration: 2s;
+    }
+    
+    /* Optimize welcome screen for mobile */
+    #welcomeScreen {
+        padding: 16px;
+    }
+    
+    #welcomeScreen .text-center {
+        padding: 16px;
+        max-width: calc(100vw - 32px);
+    }
+    
+    /* Optimize game container for mobile - full viewport layout */
+    #gameContainer {
+        padding: 0;
+        max-width: 100vw;
+        height: 100vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    
+    /* Mobile top bar optimization */
+    #topBar {
+        padding: 8px 12px;
+        flex-wrap: wrap;
+        gap: 8px;
+        /* Set topBar to exactly 20% of viewport height on mobile */
+        height: 20vh !important;
+        max-height: 20vh !important;
+        min-height: 20vh !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        box-sizing: border-box;
+        flex-shrink: 0;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    #topBar .flex {
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Ensure TopBar elements are visible */
+    #topBar h1 {
+        font-size: 18px !important;
+        margin: 0 !important;
+        white-space: nowrap;
+        line-height: 1.2;
+    }
+    
+    #topBar span {
+        font-size: 12px !important;
+        padding: 4px 8px !important;
+        white-space: nowrap;
+        line-height: 1.2;
+        display: inline-block;
+    }
+    
+    #topBar button {
+        font-size: 12px !important;
+        padding: 6px 10px !important;
+        white-space: nowrap;
+        line-height: 1.2;
+        min-height: 32px;
+    }
+    
+    #topBar > div {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    /* Mobile button adjustments */
+    #bottomBar {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 8px;
+    }
+    
+    #bottomBar button {
+        flex: 1;
+        min-width: 80px;
+    }
+    
+    /* Modal optimizations for mobile */
+    .modal-content,
+    #victoryModal > div,
+    #timeUpModal > div,
+    #pauseModal > div {
+        margin: 16px !important;
+        max-width: calc(100vw - 32px) !important;
+        max-height: calc(100vh - 32px);
+        overflow-y: auto;
+    }
+    
+    /* Hide info panel on mobile */
+    #infoPanel {
+        display: none !important;
+    }
+    
+    /* Mobile game canvas optimization - 50% of viewport */
+    #gameCanvas {
+        height: 50vh !important;
+        max-height: 50vh !important;
+        width: auto !important;
+        max-width: 95vw !important;
+        object-fit: contain;
+        flex-shrink: 0;
+    }
+    
+    /* Game canvas container optimization */
+    .game-canvas-container,
+    .flex.justify-center.mb-6 {
+        height: 50vh !important;
+        max-height: 50vh !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-bottom: 0 !important;
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+    
+    /* Bottom bar - 15% of viewport */
+    #bottomBar {
+        height: 15vh !important;
+        max-height: 15vh !important;
+        min-height: 15vh !important;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 8px;
+        box-sizing: border-box;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Ad container mobile optimization - 10% of viewport */
+    #bannerAdContainer {
+        height: 10vh !important;
+        max-height: 10vh !important;
+        min-height: 10vh !important;
+        position: sticky;
+        bottom: 0;
+        margin: 0;
+        z-index: 10;
+        box-sizing: border-box;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Portrait orientation optimization */
+@media screen and (orientation: portrait) {
+    #gameCanvas {
+        width: auto;
+        height: 70vh !important;
+        max-height: 70vh !important;
+        max-width: 95vw;
+        /* Maintain aspect ratio */
+        object-fit: contain;
+    }
+    
+    /* Optimize layout for portrait */
+    #gameContainer {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100vh !important;
+        overflow: hidden;
+        padding: 0;
+        justify-content: space-between;
+    }
+    
+    #topBar {
+        flex-shrink: 0;
+        height: 20vh !important;
+        max-height: 20vh !important;
+        min-height: 20vh !important;
+        overflow: hidden;
+        box-sizing: border-box;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    #bottomBar {
+        height: 10vh !important;
+        max-height: 10vh !important;
+        min-height: 10vh !important;
+        flex-shrink: 0;
+    }
+    
+    #bannerAdContainer {
+        height: 10vh !important;
+        max-height: 10vh !important;
+        min-height: 10vh !important;
+        flex-shrink: 0;
+    }
+    
+    .game-canvas-container,
+    .flex.justify-center.mb-6 {
+        height: 50vh !important;
+        max-height: 50vh !important;
+        flex-shrink: 0;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-bottom: 0 !important;
+    }
+    
+    #infoPanel {
+        display: none !important;
+    }
+}
+    
+
+/* Landscape orientation (limited support) */
+@media screen and (orientation: landscape) and (max-height: 600px) {
+    #gameCanvas {
+        height: 60vh;
+        width: auto;
+        max-width: 90vw;
+    }
+    
+    #gameContainer {
+        padding: 4px;
+    }
+    
+    #topBar, #bottomBar {
+        padding: 4px 8px;
+    }
+    
+    #topBar .flex {
+        gap: 4px;
+    }
+    
+    #bottomBar {
+        gap: 4px;
+    }
+    
+    /* Compact button layout for landscape */
+    #bottomBar button {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+/* Samsung S20 Ultra and similar ultra-tall mobile screens */
+@media screen and (max-width: 480px) and (min-height: 800px) {
+    #topBar {
+        height: 20vh !important;
+        max-height: 20vh !important;
+        min-height: 20vh !important;
+        padding: 8px 12px !important;
+        font-size: 13px;
+        /* Use vertical layout with centered alignment */
+        flex-direction: column !important;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    #topBar > div {
+        flex-direction: row !important;
+        gap: 8px !important;
+        align-items: center;
+    }
+    
+    #topBar .flex {
+        gap: 8px !important;
+        align-items: center;
+    }
+    
+    #topBar span {
+        padding: 4px 8px;
+        font-size: 12px;
+        white-space: nowrap;
+        line-height: 1.2;
+    }
+    
+    #topBar h1 {
+        font-size: 17px !important;
+        margin: 0 !important;
+        line-height: 1.2;
+    }
+    
+    #topBar button {
+        font-size: 12px !important;
+        padding: 6px 10px !important;
+        min-height: 30px;
+        line-height: 1.2;
+    }
+    
+    /* Ensure proper space distribution on ultra-tall screens */
+    #gameCanvas {
+        height: 50vh !important;
+        max-height: 50vh !important;
+    }
+    
+    .game-canvas-container,
+    .flex.justify-center.mb-6 {
+        height: 50vh !important;
+        max-height: 50vh !important;
+    }
+    
+    #bottomBar {
+        height: 15vh !important;
+        max-height: 15vh !important;
+        min-height: 15vh !important;
+    }
+    
+    #bannerAdContainer {
+        height: 10vh !important;
+        max-height: 10vh !important;
+        min-height: 10vh !important;
+    }
+}
+
+/* Small screen optimizations */
+@media screen and (max-width: 480px) {
+    /* Extra small screens */
+    #topBar {
+        font-size: 14px;
+        max-height: 20vh;
+    }
+    
+    #topBar span {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+    
+    #bottomBar button {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+    
+    #gameCanvas {
+        max-height: 50vh;
+    }
+    
+    /* Welcome screen optimization for small screens */
+    #welcomeScreen h1 {
+        font-size: 2.5rem !important;
+    }
+    
+    #welcomeScreen h2 {
+        font-size: 1.5rem !important;
+    }
+    
+    #welcomeScreen p {
+        font-size: 1rem !important;
+    }
+    
+    #startGameBtn {
+        padding: 12px 24px !important;
+        font-size: 1rem !important;
+    }
+}
+
+/* Ultra-tall mobile screens (like Samsung S20 Ultra, Note series) */
+@media screen and (max-width: 768px) and (min-height: 900px) {
+    #topBar {
+        height: 20vh !important;
+        max-height: 20vh !important;
+        min-height: 20vh !important;
+        padding: 8px 12px !important;
+        /* Use vertical layout with centered alignment */
+        flex-direction: column !important;
+        justify-content: center;
+        align-items: center;
+        gap: 8px !important;
+        box-sizing: border-box;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    #topBar > div {
+        flex-direction: row !important;
+        gap: 8px !important;
+        align-items: center;
+    }
+    
+    #topBar h1 {
+        font-size: 18px !important;
+        margin: 0 !important;
+        white-space: nowrap;
+        line-height: 1.2;
+    }
+    
+    #topBar span {
+        font-size: 12px !important;
+        padding: 4px 8px !important;
+        white-space: nowrap;
+        line-height: 1.2;
+    }
+    
+    #topBar button {
+        font-size: 12px !important;
+        padding: 6px 10px !important;
+        min-height: 32px;
+        line-height: 1.2;
+    }
+    
+    /* Ensure proper space distribution on ultra-tall screens */
+    #gameCanvas {
+        height: 50vh !important;
+        max-height: 50vh !important;
+    }
+    
+    #bottomBar {
+        height: 10vh !important;
+        max-height: 10vh !important;
+        min-height: 10vh !important;
+    }
+    
+    #bannerAdContainer {
+        height: 10vh !important;
+        max-height: 10vh !important;
+        min-height: 10vh !important;
+    }
+    
+    #infoPanel {
+        display: none !important;
+    }
+}
+
+/* Extra small screens */
+@media screen and (max-width: 320px) {
+    #topBar {
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
+        max-height: 25vh;
+    }
+    
+    #bottomBar {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    #bottomBar button {
+        width: 100%;
+    }
+    
+    #gameCanvas {
+        max-height: 45vh;
+    }
+}
+
+/* High DPI screens optimization */
+@media screen and (-webkit-min-device-pixel-ratio: 2),
+       screen and (min-resolution: 192dpi) {
+    #gameCanvas {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* iOS specific optimizations */
+@supports (-webkit-touch-callout: none) {
+    /* iOS Safari specific styles */
+    body {
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Prevent iOS bounce scroll */
+    html, body {
+        position: fixed;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+    }
+    
+    #gameContainer {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        height: 100vh;
+    }
+}
+
+/* Android specific optimizations */
+@media screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 1.5) {
+    /* Android Chrome specific */
+    button {
+        -webkit-appearance: none;
+        appearance: none;
+        border-radius: 8px;
+    }
+    
+    /* Optimize for Android navigation */
+    body {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+}
+
+/* Performance optimizations for mobile */
+@media screen and (max-width: 768px) {
+    /* Reduce expensive effects on mobile */
+    .backdrop-blur-sm {
+        backdrop-filter: blur(4px);
+    }
+    
+    /* Optimize shadows for mobile */
+    .shadow-2xl {
+        box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.25);
+    }
+    
+    /* Optimize gradients for mobile performance */
+    .bg-gradient-to-br {
+        background-image: linear-gradient(135deg, var(--tw-gradient-stops));
+    }
+}
+
+/* Touch feedback */
+button:active, .touch-target:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+    transition: all 0.1s ease;
+}
+
+/* Accessibility improvements for mobile */
+@media (prefers-reduced-motion: reduce) {
+    .animate-bounce, .animate-ping, .animate-pulse, .animate-float {
+        animation: none;
+    }
+    
+    * {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+
+/* Google Play Games Authentication Buttons */
+#googleSignInBtn {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+#googleSignInBtn:hover {
+    background: linear-gradient(45deg, #45a049, #4CAF50);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#googleSignOutBtn {
+    background: linear-gradient(45deg, #f44336, #d32f2f);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+#googleSignOutBtn:hover {
+    background: linear-gradient(45deg, #d32f2f, #f44336);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#authStatus {
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Confetti animation for purchase success */
+@keyframes confetti-fall {
+    0% {
+        transform: translate(-50%, -50%) translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) translateY(200px) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Dark mode support for mobile */
+@media (prefers-color-scheme: dark) {
+    /* Optional: Add dark mode styles for better mobile experience */
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+}
+
+/* Premium UI Enhancement - Prevent "Go Ads Free" button flash */
+#goAdsFreeBtn {
+    /* Hidden by default until premium status is checked */
+    display: none !important;
+}
+
+#goAdsFreeBtn.show-for-regular-users {
+    /* Only shown for non-premium users after premium status is determined */
+    display: block !important;
+}
+
+/* Tooltip arrow styles */
+.tooltip-arrow.top {
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #fbbf24;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tooltip-arrow.bottom {
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #fbbf24;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tooltip-arrow.left {
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid #fbbf24;
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.tooltip-arrow.right {
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid #fbbf24;
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Path Testing - Ball Sort Puzzle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .error {
+            border-left-color: #f44336;
+            background: rgba(244, 67, 54, 0.1);
+        }
+        .success {
+            border-left-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+        .links {
+            margin: 20px 0;
+        }
+        .links a {
+            display: inline-block;
+            margin: 5px 10px;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .links a:hover {
+            background: #45a049;
+        }
+        #status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Ball Sort Puzzle - Path Testing</h1>
+        <p>Testing file paths after project reorganization</p>
+        
+        <div class="test-section">
+            <h2>📁 Project Structure Test</h2>
+            <p><strong>Current Location:</strong> <code>/src/html/index.html</code></p>
+            <p><strong>Expected Paths:</strong></p>
+            <ul>
+                <li>CSS: <code>../css/styles.css</code></li>
+                <li>JavaScript: <code>../js/game.js</code></li>
+                <li>Audio: <code>../audio/</code></li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔗 Quick Navigation</h2>
+            <div class="links">
+                <a href="index.html">🎮 Main Game</a>
+                <a href="test-expressions.html">🎭 Test Expressions</a>
+                <a href="quick-test.html">⚡ Quick Test</a>
+                <a href="screenshot_guide.html">📸 Screenshot Guide</a>
+                <a href="../html/">📁 HTML Files Directory</a>
+                <a href="../../">🏠 Project Root</a>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>⚡ Path Verification</h2>
+            <p>Check if all resources are loading correctly:</p>
+            <button onclick="testPaths()" style="background: #2196F3; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">🧪 Test All Paths</button>
+            <div id="status"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🚀 Server Access URLs</h2>
+            <p><strong>Main Game:</strong> <a href="http://localhost:8082/src/html/index.html" target="_blank">http://localhost:8082/src/html/index.html</a></p>
+            <p><strong>This Test Page:</strong> <a href="http://localhost:8082/src/html/path-test.html" target="_blank">http://localhost:8082/src/html/path-test.html</a></p>
+            <p><strong>Project Root:</strong> <a href="http://localhost:8082/" target="_blank">http://localhost:8082/</a></p>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔧 Fixed Issues</h2>
+            <div class="success">
+                <h3>✅ Resolved Path Issues:</h3>
+                <ul>
+                    <li><strong>CSS Path:</strong> Updated <code>src/css/styles.css</code> → <code>../css/styles.css</code></li>
+                    <li><strong>JavaScript Paths:</strong> Updated all <code>src/js/*.js</code> → <code>../js/*.js</code></li>
+                    <li><strong>Resource Loading:</strong> Fixed relative paths for new folder structure</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📱 Mobile Testing</h2>
+            <p>Test the game on different devices:</p>
+            <div class="links">
+                <a href="test-samsung-s20-ultra.html">📱 Samsung S20 Ultra Test</a>
+                <a href="../../graphics/screenshot-generator.html">📸 Screenshot Generator</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        async function testPaths() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = '<p>🧪 Testing paths...</p>';
+            
+            const pathsToTest = [
+                { name: 'CSS Styles', path: '../css/styles.css' },
+                { name: 'Game JS', path: '../js/game.js' },
+                { name: 'Ball Expressions JS', path: '../js/ball-expressions.js' },
+                { name: 'Tube Designs JS', path: '../js/tube-designs.js' },
+                { name: 'AdMob Manager JS', path: '../js/admob-manager.js' },
+                { name: 'Audio Directory', path: '../audio/' }
+            ];
+            
+            let results = '<h3>📊 Test Results:</h3><ul>';
+            
+            for (const testPath of pathsToTest) {
+                try {
+                    const response = await fetch(testPath.path);
+                    if (response.ok) {
+                        results += `<li style="color: #4CAF50;">✅ ${testPath.name}: OK</li>`;
+                    } else {
+                        results += `<li style="color: #f44336;">❌ ${testPath.name}: ${response.status}</li>`;
+                    }
+                } catch (error) {
+                    results += `<li style="color: #f44336;">❌ ${testPath.name}: Error</li>`;
+                }
+            }
+            
+            results += '</ul>';
+            statusDiv.innerHTML = results;
+        }
+        
+        // Auto-test on page load
+        setTimeout(testPaths, 1000);
+    </script>
+</body>
+</html>

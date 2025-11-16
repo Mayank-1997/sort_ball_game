@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ball Sort Puzzle - Screenshot Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+        }
+        
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .device-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .device-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .device-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .device-btn.active {
+            background: #4c51bf;
+            box-shadow: 0 4px 8px rgba(76, 81, 191, 0.3);
+        }
+        
+        .screenshot-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .screenshot-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .screenshot-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .screenshot-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .mockup-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .device-mockup {
+            position: relative;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        /* Phone Mockup */
+        .phone-mockup {
+            width: 375px;
+            height: 667px;
+            background: #000;
+            border: 8px solid #000;
+        }
+        
+        /* 7-inch Tablet Mockup */
+        .tablet-7-mockup {
+            width: 600px;
+            height: 800px;
+            background: #000;
+            border: 12px solid #000;
+        }
+        
+        /* 10-inch Tablet Mockup */
+        .tablet-10-mockup {
+            width: 768px;
+            height: 1024px;
+            background: #000;
+            border: 15px solid #000;
+        }
+        
+        /* PC Mockup */
+        .pc-mockup {
+            width: 1280px;
+            height: 720px;
+            background: #000;
+            border: 5px solid #333;
+            border-radius: 5px;
+        }
+        
+        .screen-content {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Game Interface Styles */
+        .game-interface {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                #667eea 0%, 
+                #764ba2 25%, 
+                #f093fb 50%, 
+                #f5576c 75%, 
+                #4facfe 100%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-header {
+            padding: 20px;
+            background: rgba(0,0,0,0.1);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .game-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .game-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+        
+        .game-canvas-area {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .mock-canvas {
+            background: rgba(0,0,0,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tubes-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 15px;
+            padding: 20px;
+            height: 100%;
+        }
+        
+        .mock-tube {
+            width: 50px;
+            height: 200px;
+            background: linear-gradient(180deg, 
+                rgba(255, 255, 255, 0.3) 0%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            border-radius: 0 0 15px 15px;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        
+        .mock-tube::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -3px;
+            right: -3px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+        
+        .mock-ball {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 3px auto;
+            background: linear-gradient(135deg, var(--ball-color) 0%, var(--ball-shadow) 100%);
+            box-shadow: 
+                inset -2px -2px 4px rgba(0,0,0,0.3),
+                inset 2px 2px 4px rgba(255,255,255,0.4);
+            position: relative;
+        }
+        
+        .mock-ball::before {
+            content: '';
+            position: absolute;
+            top: 25%;
+            left: 30%;
+            width: 20%;
+            height: 20%;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Background Elements */
+        .bg-floating-ball {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ball-color) 0%, var(--ball-shadow) 100%);
+            box-shadow: 0 0 20px var(--ball-glow);
+            animation: float 6s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            opacity: 0.4;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            50% { transform: translateY(-20px) translateX(10px); }
+        }
+        
+        .game-buttons {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .game-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+        
+        .game-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 80%;
+            max-height: 80%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        .modal-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .modal-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .download-instructions {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .download-instructions h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .download-instructions ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .download-instructions li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Ball Sort Puzzle - Screenshot Generator</h1>
+        
+        <div class="controls">
+            <h3>Select Device Type:</h3>
+            <div class="device-selector">
+                <button class="device-btn active" data-device="phone">📱 Phone (375×667)</button>
+                <button class="device-btn" data-device="tablet-7">📱 7" Tablet (600×800)</button>
+                <button class="device-btn" data-device="tablet-10">📱 10" Tablet (768×1024)</button>
+                <button class="device-btn" data-device="pc">💻 PC (1280×720)</button>
+            </div>
+            
+            <h3>Select Screenshot Type:</h3>
+            <div class="screenshot-selector">
+                <button class="screenshot-btn active" data-screenshot="main-menu">🏠 Main Menu</button>
+                <button class="screenshot-btn" data-screenshot="easy-level">🟢 Easy Level</button>
+                <button class="screenshot-btn" data-screenshot="medium-level">🟡 Medium Level</button>
+                <button class="screenshot-btn" data-screenshot="hard-level">🔴 Hard Level</button>
+                <button class="screenshot-btn" data-screenshot="win-screen">🎉 Win Screen</button>
+                <button class="screenshot-btn" data-screenshot="game-info">ℹ️ Game Info</button>
+            </div>
+        </div>
+        
+        <div class="mockup-container">
+            <div class="device-mockup phone-mockup" id="mockup">
+                <div class="screen-content" id="screen-content">
+                    <!-- Content will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="download-instructions">
+            <h3>📥 How to Download Screenshots:</h3>
+            <ol>
+                <li><strong>Right-click</strong> on the device mockup above</li>
+                <li>Select <strong>"Save image as..."</strong> or <strong>"Copy image"</strong></li>
+                <li>Save as PNG format for best quality</li>
+                <li>The image will be automatically sized correctly for Google Play Console</li>
+            </ol>
+            
+            <h3>📐 Current Dimensions:</h3>
+            <p id="dimensions-info">Phone: 375×667px (16:9 aspect ratio, meets Google Play requirements)</p>
+            
+            <h3>✅ Google Play Console Upload:</h3>
+            <ol>
+                <li>Go to <strong>Google Play Console</strong> → <strong>Store Listing</strong> → <strong>Graphics</strong></li>
+                <li>Find the appropriate section (Phone/Tablet/PC Screenshots)</li>
+                <li>Click <strong>"Upload"</strong> and select your saved images</li>
+                <li>Upload at least 4 screenshots for promotion eligibility</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        // Device configurations
+        const deviceConfigs = {
+            'phone': {
+                width: 375,
+                height: 667,
+                class: 'phone-mockup',
+                description: 'Phone: 375×667px (16:9 aspect ratio, meets Google Play requirements)'
+            },
+            'tablet-7': {
+                width: 600,
+                height: 800,
+                class: 'tablet-7-mockup',
+                description: '7" Tablet: 600×800px (4:3 aspect ratio, meets Google Play requirements)'
+            },
+            'tablet-10': {
+                width: 768,
+                height: 1024,
+                class: 'tablet-10-mockup',
+                description: '10" Tablet: 768×1024px (4:3 aspect ratio, meets Google Play requirements)'
+            },
+            'pc': {
+                width: 1280,
+                height: 720,
+                class: 'pc-mockup',
+                description: 'PC: 1280×720px (16:9 aspect ratio, meets Google Play Games requirements)'
+            }
+        };
+        
+        // Screenshot templates
+        const screenshotTemplates = {
+            'main-menu': {
+                title: 'Ball Sort Puzzle',
+                content: generateMainMenu
+            },
+            'easy-level': {
+                title: 'Level 5 - Easy',
+                content: generateEasyLevel
+            },
+            'medium-level': {
+                title: 'Level 45 - Normal',
+                content: generateMediumLevel
+            },
+            'hard-level': {
+                title: 'Level 150 - Hard',
+                content: generateHardLevel
+            },
+            'win-screen': {
+                title: 'Level Complete!',
+                content: generateWinScreen
+            },
+            'game-info': {
+                title: 'Game Information',
+                content: generateGameInfo
+            }
+        };
+        
+        let currentDevice = 'phone';
+        let currentScreenshot = 'main-menu';
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDisplay();
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            // Device buttons
+            document.querySelectorAll('.device-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentDevice = this.dataset.device;
+                    updateDisplay();
+                });
+            });
+            
+            // Screenshot buttons
+            document.querySelectorAll('.screenshot-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.screenshot-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentScreenshot = this.dataset.screenshot;
+                    updateDisplay();
+                });
+            });
+        }
+        
+        function updateDisplay() {
+            const mockup = document.getElementById('mockup');
+            const screenContent = document.getElementById('screen-content');
+            const dimensionsInfo = document.getElementById('dimensions-info');
+            
+            // Update device mockup
+            const config = deviceConfigs[currentDevice];
+            mockup.className = `device-mockup ${config.class}`;
+            
+            // Update dimensions info
+            dimensionsInfo.textContent = config.description;
+            
+            // Update screen content
+            const template = screenshotTemplates[currentScreenshot];
+            screenContent.innerHTML = template.content();
+        }
+        
+        function generateMainMenu() {
+            return `
+                <div class="game-interface">
+                    <div class="game-header">
+                        <div class="game-title">Ball Sort Puzzle</div>
+                        <div class="game-stats">
+                            <div class="stat-item">Level: 1/1000</div>
+                            <div class="stat-item">Very Easy</div>
+                        </div>
+                    </div>
+                    <div class="game-canvas-area">
+                        <div class="mock-canvas" style="width: 80%; height: 60%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <div style="font-size: 32px; color: white; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">🎮</div>
+                            <div style="font-size: 24px; color: white; font-weight: bold; text-align: center; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">Welcome to Ball Sort Puzzle</div>
+                            <div style="font-size: 16px; color: rgba(255,255,255,0.9); text-align: center; margin-top: 15px;">1000 Challenging Levels Await!</div>
+                        </div>
+                        ${generateBackgroundElements()}
+                    </div>
+                    <div class="game-buttons">
+                        <button class="game-btn">▶️ Start Game</button>
+                        <button class="game-btn">ℹ️ Game Info</button>
+                        <button class="game-btn">⚙️ Settings</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateEasyLevel() {
+            return `
+                <div class="game-interface">
+                    <div class="game-header">
+                        <div class="game-title">Level 5</div>
+                        <div class="game-stats">
+                            <div class="stat-item">Time: 1:00</div>
+                            <div class="stat-item">Moves: 12</div>
+                            <div class="stat-item">Very Easy</div>
+                        </div>
+                    </div>
+                    <div class="game-canvas-area">
+                        <div class="mock-canvas" style="width: 90%; height: 70%;">
+                            <div class="tubes-container">
+                                <div class="mock-tube">
+                                    <div class="mock-ball" style="--ball-color: #FF6B6B; --ball-shadow: #ee5a52;"></div>
+                                    <div class="mock-ball" style="--ball-color: #4ECDC4; --ball-shadow: #45b7aa;"></div>
+                                    <div class="mock-ball" style="--ball-color: #FF6B6B; --ball-shadow: #ee5a52;"></div>
+                                </div>
+                                <div class="mock-tube">
+                                    <div class="mock-ball" style="--ball-color: #45B7D1; --ball-shadow: #3a9bc1;"></div>
+                                    <div class="mock-ball" style="--ball-color: #4ECDC4; --ball-shadow: #45b7aa;"></div>
+                                    <div class="mock-ball" style="--ball-color: #45B7D1; --ball-shadow: #3a9bc1;"></div>
+                                </div>
+                                <div class="mock-tube">
+                                    <div class="mock-ball" style="--ball-color: #FECA57; --ball-shadow: #fd9644;"></div>
+                                    <div class="mock-ball" style="--ball-color: #FECA57; --ball-shadow: #fd9644;"></div>
+                                </div>
+                                <div class="mock-tube"></div>
+                                <div class="mock-tube"></div>
+                            </div>
+                        </div>
+                        ${generateBackgroundElements()}
+                    </div>
+                    <div class="game-buttons">
+                        <button class="game-btn">↶ Undo</button>
+                        <button class="game-btn">💡 Hint</button>
+                        <button class="game-btn">🔄 Restart</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateMediumLevel() {
+            return `
+                <div class="game-interface">
+                    <div class="game-header">
+                        <div class="game-title">Level 45</div>
+                        <div class="game-stats">
+                            <div class="stat-item">Time: 1:20</div>
+                            <div class="stat-item">Moves: 28</div>
+                            <div class="stat-item">Normal</div>
+                        </div>
+                    </div>
+                    <div class="game-canvas-area">
+                        <div class="mock-canvas" style="width: 95%; height: 75%;">
+                            <div class="tubes-container">
+                                <div class="mock-tube">
+                                    <div class="mock-ball" style="--ball-color: #FF6B6B; --ball-shadow: #ee5a52;"></div>
+                                    <div class="mock-ball" style="--ball-color: #4ECDC4; --ball-shadow: #45b7aa;"></div>
+                                    <div class="mock-ball" style="--ball-color: #FF9FF3; --ball-shadow: #f368e0;"></div>
+                                    <div class="mock-ball" style="--ball-color: #FF6B6B; --ball-shadow: #ee5a52;"></div>
+                                </div>
+                                <div class="mock-tube">
+                                    <div class="mock-ball" style="--ball-color: #45B7D1; --ball-shadow: #3a9bc1;"></div>
+                                    <div class="mock-ball" style="--ball-color: #96CEB4; --ball-shadow: #85b8a3;"></div>
+                                    <div class="mock-ball" style="--ball-color: #4ECDC4; --ball-shadow: #45b7aa;"></div>
+                                    <div class="mock-ball" style="--ball-color: #45B7D1; --ball-shadow: #3a9bc1;"></div>
+                                </div>
+                                <div class="mock-tube">
+                                    <div class="mock-ball" style="--ball-color: #FECA57; --ball-shadow: #fd9644;"></div>
+                                    <div class="mock-ball" style="--ball-color: #FF9FF3; --ball-shadow: #f368e0;"></div>
+                                    <div class="mock-ball" style="--ball-color: #96CEB4; --ball-shadow: #85b8a3;"></div>
+                                    <div class="mock-ball" style="--ball-color: #FECA57; --ball-shadow: #fd9644;"></div>
+                                </div>
+                                <div class="mock-tube">
+                                    <div class="mock-ball" style="--ball-color: #54A0FF; --ball-shadow: #2e86de;"></div>
+                                    <div class="mock-ball" style="--ball-color: #54A0FF; --ball-shadow: #2e86de;"></div>
+                                </div>
+                                <div class="mock-tube"></div>
+                                <div class="mock-tube"></div>
+                            </div>
+                        </div>
+                        ${generateBackgroundElements()}
+                    </div>
+                    <div class="game-buttons">
+                        <button class="game-btn">↶ Undo</button>
+                        <button class="game-btn">💡 Hint (2)</button>
+                        <button class="game-btn">🔄 Restart</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateHardLevel() {
+            return `
+                <div class="game-interface">
+                    <div class="game-header">
+                        <div class="game-title">Level 150</div>
+                        <div class="game-stats">
+                            <div class="stat-item">Time: 2:00</div>
+                            <div class="stat-item">Moves: 45</div>
+                            <div class="stat-item">Hard</div>
+                        </div>
+                    </div>
+                    <div class="game-canvas-area">
+                        <div class="mock-canvas" style="width: 100%; height: 80%;">
+                            <div class="tubes-container" style="gap: 8px;">
+                                <div class="mock-tube" style="height: 180px;">
+                                    <div class="mock-ball" style="--ball-color: #FF6B6B; --ball-shadow: #ee5a52; width: 35px; height: 35px;"></div>
+                                    <div class="mock-ball" style="--ball-color: #4ECDC4; --ball-shadow: #45b7aa; width: 35px; height: 35px;"></div>
+                                    <div class="mock-ball" style="--ball-color: #FF9FF3; --ball-shadow: #f368e0; width: 35px; height: 35px;"></div>
+                                    <div class="mock-ball" style="--ball-color: #96CEB4; --ball-shadow: #85b8a3; width: 35px; height: 35px;"></div>
+                                </div>
+                                <div class="mock-tube" style="height: 180px;">
+                                    <div class="mock-ball" style="--ball-color: #45B7D1; --ball-shadow: #3a9bc1; width: 35px; height: 35px;"></div>
+                                    <div class="mock-ball" style="--ball-color: #FECA57; --ball-shadow: #fd9644; width: 35px; height: 35px;"></div>
+                                    <div class="mock-ball" style="--ball-color: #54A0FF; --ball-shadow: #2e86de; width: 35px; height: 35px;"></div>
+                                    <div class="mock-ball" style="--ball-color: #E17055; --ball-shadow: #d63031; width: 35px; height: 35px;"></div>
+                                </div>
+                                <div class="mock-tube" style="height: 180px;">
+                                    <div class="mock-ball" style="--ball-color: #A29BFE; --ball-shadow: #6c5ce7; width: 35px; height: 35px;"></div>
+                                    <div class="mock-ball" style="--ball-color: #FF6B6B; --ball-shadow: #ee5a52; width: 35px; height: 35px;"></div>
+                                    <div class="mock-ball" style="--ball-color: #4ECDC4; --ball-shadow: #45b7aa; width: 35px; height: 35px;"></div>
+                                    <div class="mock-ball" style="--ball-color: #FF9FF3; --ball-shadow: #f368e0; width: 35px; height: 35px;"></div>
+                                </div>
+                                <div class="mock-tube" style="height: 180px;">
+                                    <div class="mock-ball" style="--ball-color: #96CEB4; --ball-shadow: #85b8a3; width: 35px; height: 35px;"></div>
+                                    <div class="mock-ball" style="--ball-color: #45B7D1; --ball-shadow: #3a9bc1; width: 35px; height: 35px;"></div>
+                                    <div class="mock-ball" style="--ball-color: #FECA57; --ball-shadow: #fd9644; width: 35px; height: 35px;"></div>
+                                </div>
+                                <div class="mock-tube" style="height: 180px;">
+                                    <div class="mock-ball" style="--ball-color: #54A0FF; --ball-shadow: #2e86de; width: 35px; height: 35px;"></div>
+                                    <div class="mock-ball" style="--ball-color: #E17055; --ball-shadow: #d63031; width: 35px; height: 35px;"></div>
+                                </div>
+                                <div class="mock-tube" style="height: 180px;">
+                                    <div class="mock-ball" style="--ball-color: #A29BFE; --ball-shadow: #6c5ce7; width: 35px; height: 35px;"></div>
+                                </div>
+                                <div class="mock-tube" style="height: 180px;"></div>
+                                <div class="mock-tube" style="height: 180px;"></div>
+                                <div class="mock-tube" style="height: 180px;"></div>
+                            </div>
+                        </div>
+                        ${generateBackgroundElements()}
+                    </div>
+                    <div class="game-buttons">
+                        <button class="game-btn">↶ Undo</button>
+                        <button class="game-btn">💡 Hint (1)</button>
+                        <button class="game-btn">🔄 Restart</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateWinScreen() {
+            return `
+                <div class="game-interface">
+                    <div class="game-header">
+                        <div class="game-title">🎉 Level Complete!</div>
+                        <div class="game-stats">
+                            <div class="stat-item">⭐⭐⭐</div>
+                            <div class="stat-item">Time: 1:45</div>
+                            <div class="stat-item">Moves: 32</div>
+                        </div>
+                    </div>
+                    <div class="game-canvas-area">
+                        <div class="mock-canvas" style="width: 85%; height: 65%; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative;">
+                            <div style="font-size: 64px; margin-bottom: 20px; animation: bounce 1s infinite;">🎉</div>
+                            <div style="font-size: 28px; color: white; font-weight: bold; text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin-bottom: 15px;">Congratulations!</div>
+                            <div style="font-size: 18px; color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 25px;">Level 25 completed successfully!</div>
+                            <div style="display: flex; gap: 20px; font-size: 16px; color: white;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 24px;">⏱️</div>
+                                    <div>1:45</div>
+                                    <div style="font-size: 12px; opacity: 0.8;">Time</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 24px;">🎯</div>
+                                    <div>32</div>
+                                    <div style="font-size: 12px; opacity: 0.8;">Moves</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 24px;">⭐</div>
+                                    <div>3/3</div>
+                                    <div style="font-size: 12px; opacity: 0.8;">Stars</div>
+                                </div>
+                            </div>
+                            ${generateCelebrationElements()}
+                        </div>
+                        ${generateBackgroundElements()}
+                    </div>
+                    <div class="game-buttons">
+                        <button class="game-btn">➡️ Next Level</button>
+                        <button class="game-btn">📋 Level Select</button>
+                        <button class="game-btn">🔄 Replay</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateGameInfo() {
+            return `
+                <div class="game-interface">
+                    <div class="game-header">
+                        <div class="game-title">Game Information</div>
+                        <div class="game-stats">
+                            <div class="stat-item">v1.0.0</div>
+                        </div>
+                    </div>
+                    <div class="game-canvas-area">
+                        <div class="modal-overlay" style="display: flex;">
+                            <div class="modal-content" style="max-width: 90%; max-height: 90%;">
+                                <div class="modal-title">🎮 Ball Sort Puzzle</div>
+                                <div class="modal-text">
+                                    <strong>🎯 How to Play:</strong><br>
+                                    Sort colored balls by moving them between tubes until each tube contains balls of only one color.
+                                </div>
+                                <div class="modal-text">
+                                    <strong>📊 Game Features:</strong><br>
+                                    • 1000 challenging levels<br>
+                                    • Progressive difficulty system<br>
+                                    • Brain training & logic puzzles<br>
+                                    • Colorful and relaxing gameplay<br>
+                                    • No time pressure on most levels
+                                </div>
+                                <div class="modal-text">
+                                    <strong>🏆 Difficulty Levels:</strong><br>
+                                    • Very Easy (1-20): 3 colors, 1 minute<br>
+                                    • Easy (21-40): 4 colors, 1:10<br>
+                                    • Normal (41-60): 4 colors, 1:20<br>
+                                    • Normal+ (61-100): 5 colors, 1:30<br>
+                                    • Hard (101-150): 6 colors, 2:00<br>
+                                    • Very Hard (151-1000): 7+ colors, 2:00-3:00
+                                </div>
+                                <div style="margin-top: 20px;">
+                                    <button class="game-btn">✖️ Close</button>
+                                </div>
+                            </div>
+                        </div>
+                        ${generateBackgroundElements()}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateBackgroundElements() {
+            return `
+                <div class="bg-floating-ball" style="--ball-color: #FF6B6B; --ball-shadow: #ee5a52; --ball-glow: rgba(255, 107, 107, 0.4); width: 20px; height: 20px; top: 15%; left: 10%; --delay: 0s;"></div>
+                <div class="bg-floating-ball" style="--ball-color: #4ECDC4; --ball-shadow: #45b7aa; --ball-glow: rgba(78, 205, 196, 0.4); width: 15px; height: 15px; top: 70%; right: 15%; --delay: 2s;"></div>
+                <div class="bg-floating-ball" style="--ball-color: #45B7D1; --ball-shadow: #3a9bc1; --ball-glow: rgba(69, 183, 209, 0.4); width: 18px; height: 18px; bottom: 25%; left: 20%; --delay: 1s;"></div>
+                <div class="bg-floating-ball" style="--ball-color: #FECA57; --ball-shadow: #fd9644; --ball-glow: rgba(254, 202, 87, 0.4); width: 22px; height: 22px; top: 40%; right: 25%; --delay: 3s;"></div>
+            `;
+        }
+        
+        function generateCelebrationElements() {
+            return `
+                <div style="position: absolute; top: 20%; left: 20%; font-size: 20px; animation: float 2s ease-in-out infinite; animation-delay: 0s;">🎊</div>
+                <div style="position: absolute; top: 30%; right: 20%; font-size: 24px; animation: float 2s ease-in-out infinite; animation-delay: 0.5s;">✨</div>
+                <div style="position: absolute; bottom: 20%; left: 25%; font-size: 18px; animation: float 2s ease-in-out infinite; animation-delay: 1s;">🎈</div>
+                <div style="position: absolute; bottom: 30%; right: 25%; font-size: 20px; animation: float 2s ease-in-out infinite; animation-delay: 1.5s;">🌟</div>
+            `;
+        }
+    </script>
+    
+    <style>
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+    </style>
+</body>
+</html>

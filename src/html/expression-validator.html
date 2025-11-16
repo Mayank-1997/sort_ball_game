@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expression Validation</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .level-section { background: white; margin: 20px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .color-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 15px 0; }
+        .color-item { padding: 12px; border-radius: 6px; text-align: center; font-weight: bold; color: white; }
+        .expression-angry { background: #e74c3c; }
+        .expression-laughing { background: #2ecc71; }
+        .expression-crying { background: #3498db; }
+        .expression-surprised { background: #f39c12; }
+        .expression-sleeping { background: #9b59b6; }
+        .stats { background: #ecf0f1; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .good { color: #27ae60; font-weight: bold; }
+        .warning { color: #e67e22; font-weight: bold; }
+        .error { color: #e74c3c; font-weight: bold; }
+        button { background: #3498db; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; margin: 10px 5px; font-size: 16px; }
+        button:hover { background: #2980b9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎭 Ball Expression Validation System</h1>
+        <p>This tool validates that the ball expression system is working correctly with proper variety.</p>
+        
+        <button onclick="validateExpressions()">Validate Expression System</button>
+        <button onclick="testSpecificLevel()">Test Current Game Level</button>
+        <button onclick="clearResults()">Clear Results</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script src="src/js/ball-expressions.js"></script>
+    <script>
+        let expressionSystem;
+        
+        function initSystem() {
+            expressionSystem = new BallExpressionSystem();
+            console.log('Expression system initialized with expressions:', expressionSystem.getAllExpressions());
+        }
+        
+        function validateExpressions() {
+            if (!expressionSystem) initSystem();
+            
+            const results = document.getElementById('results');
+            let html = '<h2>🔍 Expression System Validation</h2>';
+            
+            // Test first 10 levels with 5 colors each
+            const testLevels = [1, 2, 3, 4, 5, 10, 25, 50, 100, 500];
+            let overallStats = {
+                totalLevels: 0,
+                levelsWithGoodVariety: 0,
+                avgUniqueExpressions: 0
+            };
+            
+            for (let level of testLevels) {
+                html += `<div class="level-section">
+                    <h3>Level ${level}</h3>
+                    <div class="color-grid">`;
+                
+                const expressions = [];
+                const expressionCounts = {};
+                
+                // Test with 5 colors (typical for early levels)
+                for (let color = 0; color < 5; color++) {
+                    const expression = expressionSystem.getExpressionForColor(level, color);
+                    expressions.push(expression);
+                    expressionCounts[expression] = (expressionCounts[expression] || 0) + 1;
+                    
+                    html += `<div class="color-item expression-${expression}">
+                        Color ${color}<br>${expression.toUpperCase()}
+                    </div>`;
+                }
+                
+                html += '</div>';
+                
+                // Calculate statistics
+                const uniqueExpressions = [...new Set(expressions)];
+                const varietyPercentage = (uniqueExpressions.length / expressions.length) * 100;
+                const isGoodVariety = uniqueExpressions.length >= 3;
+                
+                if (isGoodVariety) overallStats.levelsWithGoodVariety++;
+                overallStats.avgUniqueExpressions += uniqueExpressions.length;
+                overallStats.totalLevels++;
+                
+                // Show statistics
+                html += `<div class="stats">
+                    <strong>Statistics:</strong><br>
+                    Unique expressions: <span class="${isGoodVariety ? 'good' : 'warning'}">${uniqueExpressions.length}/5 (${varietyPercentage.toFixed(1)}%)</span><br>
+                    Expression distribution: ${Object.entries(expressionCounts).map(([expr, count]) => `${expr}:${count}`).join(', ')}<br>
+                    Variety rating: <span class="${isGoodVariety ? 'good' : 'warning'}">${isGoodVariety ? 'GOOD' : 'NEEDS IMPROVEMENT'}</span>
+                </div>`;
+                
+                html += '</div>';
+            }
+            
+            // Overall statistics
+            const avgUnique = (overallStats.avgUniqueExpressions / overallStats.totalLevels).toFixed(1);
+            const varietyScore = (overallStats.levelsWithGoodVariety / overallStats.totalLevels) * 100;
+            
+            html += `<div class="level-section">
+                <h2>📊 Overall Results</h2>
+                <div class="stats">
+                    <strong>System Performance:</strong><br>
+                    Levels tested: ${overallStats.totalLevels}<br>
+                    Levels with good variety (3+ unique): <span class="${varietyScore >= 70 ? 'good' : 'warning'}">${overallStats.levelsWithGoodVariety}/${overallStats.totalLevels} (${varietyScore.toFixed(1)}%)</span><br>
+                    Average unique expressions per level: <span class="${avgUnique >= 3 ? 'good' : 'warning'}">${avgUnique}/5</span><br>
+                    <br>
+                    <strong>Status:</strong> <span class="${varietyScore >= 70 && avgUnique >= 3 ? 'good' : 'warning'}">
+                        ${varietyScore >= 70 && avgUnique >= 3 ? '✅ EXPRESSION SYSTEM WORKING CORRECTLY' : '⚠️ SYSTEM NEEDS ADJUSTMENT'}
+                    </span>
+                </div>
+            </div>`;
+            
+            results.innerHTML = html;
+        }
+        
+        function testSpecificLevel() {
+            if (!expressionSystem) initSystem();
+            
+            const level = parseInt(prompt('Enter level to test (1-1000):', '1')) || 1;
+            const colors = parseInt(prompt('Enter number of colors to test (1-8):', '5')) || 5;
+            
+            const results = document.getElementById('results');
+            let html = `<div class="level-section">
+                <h2>🎯 Specific Level Test: Level ${level}</h2>
+                <div class="color-grid">`;
+            
+            const expressions = [];
+            for (let color = 0; color < colors; color++) {
+                const expression = expressionSystem.getExpressionForColor(level, color);
+                expressions.push(expression);
+                
+                html += `<div class="color-item expression-${expression}">
+                    Color ${color}<br>${expression.toUpperCase()}
+                </div>`;
+            }
+            
+            html += '</div>';
+            
+            const uniqueExpressions = [...new Set(expressions)];
+            html += `<div class="stats">
+                <strong>Results for Level ${level}:</strong><br>
+                Colors tested: ${colors}<br>
+                Unique expressions: ${uniqueExpressions.length}/${colors}<br>
+                Expressions used: ${uniqueExpressions.join(', ')}
+            </div></div>`;
+            
+            results.innerHTML = html + results.innerHTML;
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', initSystem);
+    </script>
+</body>
+</html>

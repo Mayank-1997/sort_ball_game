@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad-Free Test Runner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-6">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">🧪 Go Ad-Free Test Runner</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Quick Test -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">Quick Visual Test</h2>
+                <p class="text-gray-300 mb-4">Test the confirmation dialog appearance and messaging</p>
+                <button id="quickTest" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
+                    Show Dialog
+                </button>
+            </div>
+            
+            <!-- Full Test Suite -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">Automated Test Suite</h2>
+                <p class="text-gray-300 mb-4">Run all Android purchase flow tests</p>
+                <button id="runTests" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg">
+                    Run All Tests
+                </button>
+            </div>
+        </div>
+        
+        <!-- Test Results -->
+        <div id="testResults" class="mt-8 bg-gray-800 rounded-lg p-6 hidden">
+            <h2 class="text-xl font-semibold mb-4">Test Results</h2>
+            <div id="resultsContent"></div>
+        </div>
+        
+        <!-- Links -->
+        <div class="mt-8 flex space-x-4">
+            <a href="test-go-ad-free-android.html" class="text-blue-400 hover:text-blue-300 underline">
+                → Full Testing Interface
+            </a>
+            <a href="../../index.html" class="text-green-400 hover:text-green-300 underline">
+                → Back to Game
+            </a>
+        </div>
+    </div>
+
+    <!-- Load required scripts -->
+    <script src="../js/user-progress.js"></script>
+    <script src="../js/google-play-games.js"></script>
+    <script src="../js/game.js"></script>
+    <script src="android-ad-free-tests.js"></script>
+    
+    <script>
+        // Initialize game instance for testing
+        let gameInstance;
+        
+        // Wait for scripts to load
+        setTimeout(() => {
+            if (typeof BallSortGame !== 'undefined') {
+                gameInstance = new BallSortGame();
+            }
+        }, 1000);
+        
+        // Quick test button
+        document.getElementById('quickTest').addEventListener('click', () => {
+            if (gameInstance && typeof gameInstance.showAdFreeConfirmationDialog === 'function') {
+                gameInstance.showAdFreeConfirmationDialog();
+            } else {
+                alert('Game instance not ready. Please wait a moment and try again.');
+            }
+        });
+        
+        // Run tests button
+        document.getElementById('runTests').addEventListener('click', async () => {
+            const resultsDiv = document.getElementById('testResults');
+            const contentDiv = document.getElementById('resultsContent');
+            
+            resultsDiv.classList.remove('hidden');
+            contentDiv.innerHTML = '<p class="text-blue-300">Running tests...</p>';
+            
+            if (typeof AndroidAdFreeTestSuite !== 'undefined') {
+                const testSuite = new AndroidAdFreeTestSuite();
+                const results = await testSuite.runAllTests();
+                
+                // Display results
+                const passed = results.filter(r => r.success).length;
+                const total = results.length;
+                
+                let html = `
+                    <div class="mb-4">
+                        <div class="text-lg font-semibold">
+                            Tests Passed: <span class="${passed === total ? 'text-green-400' : 'text-yellow-400'}">${passed}/${total}</span>
+                        </div>
+                        <div class="text-sm text-gray-400">Success Rate: ${((passed/total) * 100).toFixed(1)}%</div>
+                    </div>
+                    <div class="space-y-2">
+                `;
+                
+                results.forEach(result => {
+                    const icon = result.success ? '✅' : '❌';
+                    const color = result.success ? 'text-green-300' : 'text-red-300';
+                    html += `
+                        <div class="border border-gray-700 rounded p-3">
+                            <div class="font-medium ${color}">
+                                ${icon} ${result.testName}
+                            </div>
+                            <div class="text-sm text-gray-400 mt-1">
+                                ${result.message}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                contentDiv.innerHTML = html;
+            } else {
+                contentDiv.innerHTML = '<p class="text-red-300">Test suite not loaded. Please refresh the page.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

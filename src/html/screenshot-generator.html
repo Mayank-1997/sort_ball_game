@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ball Sort Game - Screenshot Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .phone-mockup {
+            width: 360px;
+            height: 640px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tablet-7-mockup {
+            width: 800px;
+            height: 600px;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .tablet-10-mockup {
+            width: 1200px;
+            height: 800px;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 20px auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .game-header {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            justify-content: space-between;
+        }
+        
+        .tubes-container {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .tube {
+            width: 40px;
+            height: 120px;
+            border: 3px solid #333;
+            border-radius: 0 0 20px 20px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            padding: 3px;
+        }
+        
+        .ball {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin: 2px 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), transparent 50%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .ball.red { background-color: #ff6b6b; }
+        .ball.blue { background-color: #4ecdc4; }
+        .ball.green { background-color: #45b7d1; }
+        .ball.yellow { background-color: #feca57; }
+        .ball.purple { background-color: #ff9ff3; }
+        .ball.orange { background-color: #ff9500; }
+        
+        .level-info {
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .level-info h3 {
+            margin: 0;
+            color: #333;
+            font-size: 18px;
+        }
+        
+        .level-info p {
+            margin: 5px 0 0 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(45deg, #45b7d1, #96ceb4);
+            color: white;
+        }
+        
+        .floating-balls {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .floating-ball {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 10s infinite ease-in-out;
+            opacity: 0.6;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        
+        .controls h4 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+        
+        .controls button {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background: #4ecdc4;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .controls button:hover {
+            background: #45b7aa;
+        }
+        
+        .screenshot-info {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h4>Screenshot Sizes</h4>
+        <button onclick="setPhoneSize()">Phone (360×640)</button>
+        <button onclick="setTablet7Size()">7" Tablet (800×600)</button>
+        <button onclick="setTablet10Size()">10" Tablet (1200×800)</button>
+        <button onclick="setPCSize()">PC (1280×720)</button>
+        <hr>
+        <h4>Game States</h4>
+        <button onclick="showMainMenu()">Main Menu</button>
+        <button onclick="showEasyLevel()">Easy Level</button>
+        <button onclick="showMediumLevel()">Medium Level</button>
+        <button onclick="showHardLevel()">Hard Level</button>
+        <button onclick="showWinScreen()">Win Screen</button>
+        <button onclick="showGameInfo()">Game Info</button>
+    </div>
+    
+    <div class="screenshot-info">
+        <strong>Screenshot Instructions:</strong><br>
+        1. Select device size<br>
+        2. Choose game state<br>
+        3. Use browser's screenshot tool or Snipping Tool<br>
+        4. Save as PNG/JPEG<br>
+        <br>
+        <strong>Current:</strong> <span id="currentMode">Phone - Main Menu</span>
+    </div>
+    
+    <div id="gameContainer" class="phone-mockup">
+        <div class="floating-balls">
+            <div class="floating-ball" style="width: 20px; height: 20px; background: #ff6b6b; top: 10%; left: 10%; animation-delay: 0s;"></div>
+            <div class="floating-ball" style="width: 15px; height: 15px; background: #4ecdc4; top: 20%; right: 15%; animation-delay: 2s;"></div>
+            <div class="floating-ball" style="width: 18px; height: 18px; background: #45b7d1; bottom: 30%; left: 20%; animation-delay: 4s;"></div>
+            <div class="floating-ball" style="width: 12px; height: 12px; background: #feca57; top: 60%; right: 20%; animation-delay: 1s;"></div>
+        </div>
+        
+        <div class="game-container">
+            <div class="game-header">Ball Sort Puzzle</div>
+            
+            <div id="gameContent">
+                <!-- Content will be dynamically loaded based on selected state -->
+                <div class="level-info">
+                    <h3>Welcome to Ball Sort!</h3>
+                    <p>1000 challenging levels await</p>
+                    <p>Train your brain with colorful puzzles</p>
+                </div>
+                
+                <div class="tubes-container">
+                    <div class="tube">
+                        <div class="ball red"></div>
+                        <div class="ball blue"></div>
+                        <div class="ball green"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball yellow"></div>
+                        <div class="ball purple"></div>
+                        <div class="ball red"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball blue"></div>
+                        <div class="ball green"></div>
+                        <div class="ball yellow"></div>
+                    </div>
+                    <div class="tube"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-primary">Start Game</button>
+                    <button class="btn btn-secondary">Game Info</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setPhoneSize() {
+            const container = document.getElementById('gameContainer');
+            container.className = 'phone-mockup';
+            updateCurrentMode('Phone');
+        }
+        
+        function setTablet7Size() {
+            const container = document.getElementById('gameContainer');
+            container.className = 'tablet-7-mockup';
+            updateCurrentMode('7" Tablet');
+        }
+        
+        function setTablet10Size() {
+            const container = document.getElementById('gameContainer');
+            container.className = 'tablet-10-mockup';
+            updateCurrentMode('10" Tablet');
+        }
+        
+        function setPCSize() {
+            const container = document.getElementById('gameContainer');
+            container.className = 'tablet-10-mockup';
+            container.style.width = '1280px';
+            container.style.height = '720px';
+            updateCurrentMode('PC');
+        }
+        
+        function showMainMenu() {
+            document.getElementById('gameContent').innerHTML = `
+                <div class="level-info">
+                    <h3>Welcome to Ball Sort!</h3>
+                    <p>1000 challenging levels await</p>
+                    <p>Train your brain with colorful puzzles</p>
+                </div>
+                
+                <div class="tubes-container">
+                    <div class="tube">
+                        <div class="ball red"></div>
+                        <div class="ball blue"></div>
+                        <div class="ball green"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball yellow"></div>
+                        <div class="ball purple"></div>
+                        <div class="ball red"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball blue"></div>
+                        <div class="ball green"></div>
+                        <div class="ball yellow"></div>
+                    </div>
+                    <div class="tube"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-primary">Start Game</button>
+                    <button class="btn btn-secondary">Game Info</button>
+                </div>
+            `;
+            updateGameState('Main Menu');
+        }
+        
+        function showEasyLevel() {
+            document.getElementById('gameContent').innerHTML = `
+                <div class="level-info">
+                    <h3>Level 1 - Easy</h3>
+                    <p>Sort the balls by color</p>
+                    <p>Moves: 3 | Best: 5</p>
+                </div>
+                
+                <div class="tubes-container">
+                    <div class="tube">
+                        <div class="ball red"></div>
+                        <div class="ball red"></div>
+                        <div class="ball red"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball blue"></div>
+                        <div class="ball blue"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball blue"></div>
+                    </div>
+                    <div class="tube"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-primary">Undo</button>
+                    <button class="btn btn-secondary">Restart</button>
+                </div>
+            `;
+            updateGameState('Easy Level');
+        }
+        
+        function showMediumLevel() {
+            document.getElementById('gameContent').innerHTML = `
+                <div class="level-info">
+                    <h3>Level 156 - Medium</h3>
+                    <p>Getting tricky now!</p>
+                    <p>Moves: 12 | Best: 18</p>
+                </div>
+                
+                <div class="tubes-container">
+                    <div class="tube">
+                        <div class="ball red"></div>
+                        <div class="ball blue"></div>
+                        <div class="ball green"></div>
+                        <div class="ball yellow"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball purple"></div>
+                        <div class="ball red"></div>
+                        <div class="ball blue"></div>
+                        <div class="ball green"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball yellow"></div>
+                        <div class="ball purple"></div>
+                        <div class="ball red"></div>
+                        <div class="ball blue"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball green"></div>
+                        <div class="ball yellow"></div>
+                    </div>
+                    <div class="tube"></div>
+                    <div class="tube"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-primary">Undo</button>
+                    <button class="btn btn-secondary">Hint</button>
+                </div>
+            `;
+            updateGameState('Medium Level');
+        }
+        
+        function showHardLevel() {
+            document.getElementById('gameContent').innerHTML = `
+                <div class="level-info">
+                    <h3>Level 789 - Hard</h3>
+                    <p>Expert challenge!</p>
+                    <p>Moves: 25 | Best: 32</p>
+                </div>
+                
+                <div class="tubes-container">
+                    <div class="tube">
+                        <div class="ball red"></div>
+                        <div class="ball blue"></div>
+                        <div class="ball green"></div>
+                        <div class="ball yellow"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball purple"></div>
+                        <div class="ball orange"></div>
+                        <div class="ball red"></div>
+                        <div class="ball blue"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball green"></div>
+                        <div class="ball yellow"></div>
+                        <div class="ball purple"></div>
+                        <div class="ball orange"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball red"></div>
+                        <div class="ball blue"></div>
+                        <div class="ball green"></div>
+                        <div class="ball yellow"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball purple"></div>
+                        <div class="ball orange"></div>
+                    </div>
+                    <div class="tube"></div>
+                    <div class="tube"></div>
+                    <div class="tube"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-primary">Undo</button>
+                    <button class="btn btn-secondary">Restart</button>
+                </div>
+            `;
+            updateGameState('Hard Level');
+        }
+        
+        function showWinScreen() {
+            document.getElementById('gameContent').innerHTML = `
+                <div class="level-info" style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4); color: white;">
+                    <h3>🎉 Level Complete! 🎉</h3>
+                    <p>Fantastic job!</p>
+                    <p>⭐⭐⭐ Perfect Score!</p>
+                </div>
+                
+                <div class="tubes-container">
+                    <div class="tube">
+                        <div class="ball red"></div>
+                        <div class="ball red"></div>
+                        <div class="ball red"></div>
+                        <div class="ball red"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball blue"></div>
+                        <div class="ball blue"></div>
+                        <div class="ball blue"></div>
+                        <div class="ball blue"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball green"></div>
+                        <div class="ball green"></div>
+                        <div class="ball green"></div>
+                        <div class="ball green"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball yellow"></div>
+                        <div class="ball yellow"></div>
+                        <div class="ball yellow"></div>
+                        <div class="ball yellow"></div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-primary">Next Level</button>
+                    <button class="btn btn-secondary">Menu</button>
+                </div>
+            `;
+            updateGameState('Win Screen');
+        }
+        
+        function showGameInfo() {
+            document.getElementById('gameContent').innerHTML = `
+                <div class="level-info">
+                    <h3>🎮 Game Info</h3>
+                    <p><strong>Total Levels:</strong> 1000</p>
+                    <p><strong>Difficulty:</strong> Progressive</p>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 15px; margin: 10px; text-align: left; font-size: 12px;">
+                    <p><strong>Easy (1-250):</strong> 3-4 colors, 5-10 min</p>
+                    <p><strong>Medium (251-500):</strong> 4-5 colors, 10-15 min</p>
+                    <p><strong>Hard (501-750):</strong> 5-6 colors, 15-25 min</p>
+                    <p><strong>Expert (751-1000):</strong> 6+ colors, 20-30 min</p>
+                </div>
+                
+                <div class="tubes-container">
+                    <div class="tube">
+                        <div class="ball red"></div>
+                        <div class="ball blue"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball green"></div>
+                        <div class="ball yellow"></div>
+                    </div>
+                    <div class="tube">
+                        <div class="ball purple"></div>
+                        <div class="ball orange"></div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-primary">Close</button>
+                </div>
+            `;
+            updateGameState('Game Info');
+        }
+        
+        function updateCurrentMode(device) {
+            const gameState = document.getElementById('currentMode').textContent.split(' - ')[1] || 'Main Menu';
+            document.getElementById('currentMode').textContent = `${device} - ${gameState}`;
+        }
+        
+        function updateGameState(state) {
+            const device = document.getElementById('currentMode').textContent.split(' - ')[0] || 'Phone';
+            document.getElementById('currentMode').textContent = `${device} - ${state}`;
+        }
+        
+        // Initialize with main menu
+        showMainMenu();
+    </script>
+</body>
+</html>

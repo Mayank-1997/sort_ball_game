@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ball Sort Puzzle - PC Logo Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 30px;
+        }
+        
+        .logo-container {
+            background: transparent;
+            display: inline-block;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .pc-logo {
+            width: 600px;
+            height: 400px;
+            background: transparent;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 2px dashed #ccc;
+        }
+        
+        .logo-text {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: #667eea;
+            text-shadow: 
+                3px 3px 0px #4c51bf,
+                -1px -1px 0px #667eea,
+                1px -1px 0px #667eea,
+                -1px 1px 0px #667eea,
+                1px 1px 0px #667eea;
+            margin-bottom: 10px;
+            line-height: 1.2;
+            text-align: center;
+        }
+        
+        .logo-subtitle {
+            font-family: 'Arial', sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+            color: #764ba2;
+            text-shadow: 
+                1px 1px 0px #fff,
+                -1px -1px 0px #fff,
+                1px -1px 0px #fff,
+                -1px 1px 0px #fff;
+            margin-bottom: 20px;
+        }
+        
+        .logo-balls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .logo-ball {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ball-color) 0%, var(--ball-shadow) 100%);
+            box-shadow: 
+                inset -3px -3px 6px rgba(0,0,0,0.3),
+                inset 3px 3px 6px rgba(255,255,255,0.4),
+                0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            animation: logoFloat 3s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+        
+        .logo-ball::before {
+            content: '';
+            position: absolute;
+            top: 30%;
+            left: 35%;
+            width: 25%;
+            height: 25%;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        .instructions {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+        
+        .specs {
+            background: #e8f2ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .download-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        
+        .download-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💻 Ball Sort Puzzle - PC Logo Generator</h1>
+        
+        <div class="specs">
+            <h3>📐 Google Play Games PC Logo Requirements:</h3>
+            <ul>
+                <li><strong>Format:</strong> PNG with transparent background</li>
+                <li><strong>Size:</strong> 600px × 400px</li>
+                <li><strong>Max File Size:</strong> 8 MB</li>
+                <li><strong>Content:</strong> Must represent your game name clearly</li>
+                <li><strong>Background:</strong> MUST be transparent (no solid colors)</li>
+            </ul>
+        </div>
+        
+        <div class="logo-container">
+            <div class="pc-logo" id="pc-logo">
+                <div class="logo-text">BALL SORT<br>PUZZLE</div>
+                <div class="logo-subtitle">Brain Training Game</div>
+                <div class="logo-balls">
+                    <div class="logo-ball" style="--ball-color: #FF6B6B; --ball-shadow: #ee5a52; --delay: 0s;"></div>
+                    <div class="logo-ball" style="--ball-color: #4ECDC4; --ball-shadow: #45b7aa; --delay: 0.5s;"></div>
+                    <div class="logo-ball" style="--ball-color: #45B7D1; --ball-shadow: #3a9bc1; --delay: 1s;"></div>
+                    <div class="logo-ball" style="--ball-color: #FECA57; --ball-shadow: #fd9644; --delay: 1.5s;"></div>
+                    <div class="logo-ball" style="--ball-color: #FF9FF3; --ball-shadow: #f368e0; --delay: 2s;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>📥 How to Download the PC Logo:</h3>
+            <ol>
+                <li><strong>Right-click</strong> on the logo above (inside the dashed border)</li>
+                <li>Select <strong>"Save image as..."</strong></li>
+                <li>Save as <strong>PNG format</strong> to preserve transparency</li>
+                <li>The file will be exactly 600×400px as required</li>
+            </ol>
+            
+            <h3>✅ Upload to Google Play Console:</h3>
+            <ol>
+                <li>Go to <strong>Google Play Console</strong> → <strong>Store Listing</strong> → <strong>Graphics</strong></li>
+                <li>Find <strong>"Google Play Games on PC"</strong> section</li>
+                <li>Click <strong>"PC Logo"</strong> upload area</li>
+                <li>Select your downloaded PNG file</li>
+                <li>Verify the transparent background is preserved</li>
+            </ol>
+            
+            <div class="specs">
+                <strong>⚠️ Important Notes:</strong>
+                <ul>
+                    <li>The background is transparent - this is required for PC logos</li>
+                    <li>The text is bold and readable at various sizes</li>
+                    <li>Colorful balls represent the game's core mechanic</li>
+                    <li>Logo works well when overlaid on different backgrounds</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

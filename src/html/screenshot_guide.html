@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ball Sort Game - Screenshot Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .screenshot-frame {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .resolution-selector {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        .res-btn {
+            padding: 8px 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .res-btn:hover {
+            background: #45a049;
+        }
+        .game-frame {
+            border: 3px solid #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .iframe-container {
+            position: relative;
+            background: #000;
+        }
+        iframe {
+            border: none;
+            display: block;
+        }
+        .instructions {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .feature-graphic {
+            width: 1024px;
+            height: 500px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 20px auto;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        .feature-content {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+        .feature-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .feature-subtitle {
+            font-size: 24px;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .floating-balls {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        .floating-ball {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        .ball-1 { background: #ff6b6b; top: 10%; left: 10%; animation-delay: 0s; }
+        .ball-2 { background: #4ecdc4; top: 20%; right: 15%; animation-delay: 1s; }
+        .ball-3 { background: #45b7d1; bottom: 30%; left: 20%; animation-delay: 2s; }
+        .ball-4 { background: #96ceb4; bottom: 20%; right: 10%; animation-delay: 3s; }
+        .ball-5 { background: #feca57; top: 60%; left: 80%; animation-delay: 4s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .download-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .download-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .download-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Ball Sort Game - Screenshot Generator</h1>
+        
+        <div class="instructions">
+            <h3>📸 How to Take Screenshots:</h3>
+            <ol>
+                <li><strong>Right-click</strong> on any game frame below</li>
+                <li>Select <strong>"Take Screenshot"</strong> or use <strong>Win + Shift + S</strong></li>
+                <li>Crop to the exact frame dimensions</li>
+                <li>Save as PNG or JPEG</li>
+                <li>Verify dimensions match requirements</li>
+            </ol>
+        </div>
+
+        <!-- 7-inch Tablet Screenshots -->
+        <div class="screenshot-frame">
+            <h2>📱 7-inch Tablet Screenshots</h2>
+            <p><strong>Requirements:</strong> 16:9 or 9:16 aspect ratio, 320px-3,840px per side</p>
+            
+            <div class="resolution-selector">
+                <button class="res-btn" onclick="setResolution('tablet7-landscape', 1920, 1080)">1920×1080</button>
+                <button class="res-btn" onclick="setResolution('tablet7-landscape', 2560, 1440)">2560×1440</button>
+                <button class="res-btn" onclick="setResolution('tablet7-portrait', 1080, 1920)">1080×1920</button>
+                <button class="res-btn" onclick="setResolution('tablet7-portrait', 1440, 2560)">1440×2560</button>
+            </div>
+            
+            <div class="game-frame">
+                <div class="iframe-container">
+                    <iframe id="tablet7-landscape" src="http://localhost:8080" width="1920" height="1080" style="transform: scale(0.4); transform-origin: top left; width: 1920px; height: 1080px;"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10-inch Tablet Screenshots -->
+        <div class="screenshot-frame">
+            <h2>📱 10-inch Tablet Screenshots</h2>
+            <p><strong>Requirements:</strong> 16:9 or 9:16 aspect ratio, 1,080px-7,680px per side</p>
+            
+            <div class="resolution-selector">
+                <button class="res-btn" onclick="setResolution('tablet10-landscape', 2560, 1440)">2560×1440</button>
+                <button class="res-btn" onclick="setResolution('tablet10-landscape', 3840, 2160)">3840×2160</button>
+                <button class="res-btn" onclick="setResolution('tablet10-portrait', 1440, 2560)">1440×2560</button>
+                <button class="res-btn" onclick="setResolution('tablet10-portrait', 2160, 3840)">2160×3840</button>
+            </div>
+            
+            <div class="game-frame">
+                <div class="iframe-container">
+                    <iframe id="tablet10-landscape" src="http://localhost:8080" width="2560" height="1440" style="transform: scale(0.3); transform-origin: top left; width: 2560px; height: 1440px;"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Google Play Games on PC Feature Graphic -->
+        <div class="screenshot-frame">
+            <h2>🖥️ Google Play Games on PC - Feature Graphic</h2>
+            <p><strong>Dimensions:</strong> 1024×500px</p>
+            
+            <div class="feature-graphic" id="feature-graphic">
+                <div class="floating-balls">
+                    <div class="floating-ball ball-1"></div>
+                    <div class="floating-ball ball-2"></div>
+                    <div class="floating-ball ball-3"></div>
+                    <div class="floating-ball ball-4"></div>
+                    <div class="floating-ball ball-5"></div>
+                </div>
+                <div class="feature-content">
+                    <div class="feature-title">🎯 Ball Sort Puzzle</div>
+                    <div class="feature-subtitle">Challenge Your Mind • Sort & Win</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <h3>💾 Quick Actions:</h3>
+            <a href="http://localhost:8080" target="_blank" class="download-btn">🎮 Open Game</a>
+            <button class="download-btn" onclick="captureFeatureGraphic()">📸 Capture Feature Graphic</button>
+            <button class="download-btn" onclick="window.print()">🖨️ Print Page</button>
+        </div>
+
+        <div class="instructions">
+            <h3>✅ Screenshot Checklist:</h3>
+            <ul>
+                <li>✅ <strong>7-inch Tablet:</strong> 2-8 screenshots, 16:9 or 9:16, 320px-3,840px</li>
+                <li>✅ <strong>10-inch Tablet:</strong> 2-8 screenshots, 16:9 or 9:16, 1,080px-7,680px</li>
+                <li>✅ <strong>Feature Graphic:</strong> 1024×500px for Google Play Games on PC</li>
+                <li>✅ <strong>File Format:</strong> PNG or JPEG, up to 8MB each</li>
+                <li>✅ <strong>Content:</strong> Show gameplay, menus, victory screens, options</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function setResolution(frameId, width, height) {
+            const iframe = document.getElementById(frameId);
+            const container = iframe.parentElement;
+            
+            iframe.width = width;
+            iframe.height = height;
+            iframe.style.width = width + 'px';
+            iframe.style.height = height + 'px';
+            
+            // Scale to fit in container
+            const scale = Math.min(800 / width, 600 / height);
+            iframe.style.transform = `scale(${scale})`;
+            iframe.style.transformOrigin = 'top left';
+            
+            container.style.width = (width * scale) + 'px';
+            container.style.height = (height * scale) + 'px';
+            
+            console.log(`Set ${frameId} to ${width}×${height}`);
+        }
+        
+        function captureFeatureGraphic() {
+            const element = document.getElementById('feature-graphic');
+            
+            // Use html2canvas if available, otherwise show instructions
+            if (typeof html2canvas !== 'undefined') {
+                html2canvas(element, {
+                    width: 1024,
+                    height: 500,
+                    scale: 2
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = 'ball-sort-feature-graphic.png';
+                    link.href = canvas.toDataURL();
+                    link.click();
+                });
+            } else {
+                alert('Right-click on the feature graphic and select "Save image as..." or use Win + Shift + S to capture it!');
+            }
+        }
+        
+        // Auto-refresh iframes every 30 seconds to keep them active
+        setInterval(() => {
+            const iframes = document.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                if (iframe.src.includes('localhost')) {
+                    iframe.src = iframe.src;
+                }
+            });
+        }, 30000);
+    </script>
+</body>
+</html>

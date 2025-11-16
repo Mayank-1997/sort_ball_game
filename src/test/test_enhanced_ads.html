@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Ad Choice System Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .modal-enter {
+            animation: modalEnter 0.3s ease-out;
+        }
+        
+        @keyframes modalEnter {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 min-h-screen flex items-center justify-center">
+    <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+        <div class="text-center">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6">🎬 Enhanced Ad Choice System Test</h1>
+            <p class="text-gray-600 mb-8">This demonstrates the new pre-ad choice system that makes it clear to users what rewards they can expect.</p>
+            
+            <div class="space-y-4">
+                <button onclick="testTimeUpDialog()" class="w-full bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                    ⏰ Test Time Up Dialog
+                </button>
+                
+                <button onclick="testGeneralAdChoice()" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                    🎬 Test General Ad Choice
+                </button>
+                
+                <button onclick="testEnhancedAd('skip')" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                    ⚡ Test Skip Reward (+20s)
+                </button>
+                
+                <button onclick="testEnhancedAd('full')" class="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                    💎 Test Full Reward (+30s)
+                </button>
+            </div>
+            
+            <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+                <h3 class="font-semibold text-blue-800 mb-2">✨ What's New:</h3>
+                <ul class="text-sm text-blue-700 text-left space-y-1">
+                    <li>• Clear reward options before ad starts</li>
+                    <li>• Users can change their mind during the ad</li>
+                    <li>• Better preparation for Android AdMob integration</li>
+                    <li>• Enhanced UX with visual choice indicators</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock game object for testing
+        const mockGame = {
+            onAdRewardEarned: function(seconds) {
+                console.log(`✅ Reward earned: ${seconds} seconds`);
+                alert(`🎉 You earned ${seconds} seconds of extra time!`);
+            },
+            
+            restartLevel: function() {
+                console.log('🔄 Level restarted');
+                alert('🔄 Level restarted - try again!');
+            }
+        };
+
+        // Mock methods from the game
+        function testTimeUpDialog() {
+            showEnhancedTimeUpDialog();
+        }
+        
+        function testGeneralAdChoice() {
+            showAdChoiceDialog();
+        }
+        
+        function testEnhancedAd(type) {
+            simulateEnhancedRewardedAd(type);
+        }
+
+        // Enhanced Time Up Dialog
+        function showEnhancedTimeUpDialog() {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.id = 'enhancedTimeUpModal';
+            modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50';
+            
+            modalOverlay.innerHTML = `
+                <div class="bg-gradient-to-br from-red-900 via-orange-900 to-yellow-900 rounded-2xl p-8 mx-4 max-w-md w-full shadow-2xl border border-red-500/30">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4">⏰</div>
+                        <h2 class="text-2xl font-bold text-white mb-2">Time's Up!</h2>
+                        <p class="text-red-200 mb-6">Don't give up! Watch an ad to continue playing:</p>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="bg-yellow-800/40 rounded-lg p-4 border border-yellow-500/50 hover:bg-yellow-800/60 transition-colors cursor-pointer" id="skipRewardOption">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-left">
+                                        <h3 class="text-lg font-semibold text-yellow-300">Skip After 15s</h3>
+                                        <p class="text-yellow-100 text-sm">Skip ad early and get:</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-yellow-400">+20s</div>
+                                        <div class="text-xs text-yellow-300">Quick reward</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-green-800/40 rounded-lg p-4 border border-green-500/50 hover:bg-green-800/60 transition-colors cursor-pointer" id="fullRewardOption">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-left">
+                                        <h3 class="text-lg font-semibold text-green-300">Watch Full Ad</h3>
+                                        <p class="text-green-100 text-sm">Complete entire ad and get:</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-green-400">+30s</div>
+                                        <div class="text-xs text-green-300">Maximum reward</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button id="startAdForReward" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors mb-3 w-full">
+                                🎬 Start Ad (Choose reward during ad)
+                            </button>
+                            <button id="giveUpLevel" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors w-full">
+                                Give Up Level
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modalOverlay);
+            
+            const startAdBtn = document.getElementById('startAdForReward');
+            const giveUpBtn = document.getElementById('giveUpLevel');
+            const skipOption = document.getElementById('skipRewardOption');
+            const fullOption = document.getElementById('fullRewardOption');
+            
+            let selectedReward = 'full';
+            
+            skipOption.addEventListener('click', () => {
+                skipOption.classList.add('ring-2', 'ring-yellow-400');
+                fullOption.classList.remove('ring-2', 'ring-green-400');
+                selectedReward = 'skip';
+                startAdBtn.innerHTML = '🎬 Start Ad (Skip after 15s → +20s)';
+            });
+            
+            fullOption.addEventListener('click', () => {
+                fullOption.classList.add('ring-2', 'ring-green-400');
+                skipOption.classList.remove('ring-2', 'ring-yellow-400');
+                selectedReward = 'full';
+                startAdBtn.innerHTML = '🎬 Start Ad (Watch full → +30s)';
+            });
+            
+            fullOption.classList.add('ring-2', 'ring-green-400');
+            startAdBtn.innerHTML = '🎬 Start Ad (Watch full → +30s)';
+            
+            startAdBtn.addEventListener('click', () => {
+                document.body.removeChild(modalOverlay);
+                simulateEnhancedRewardedAd(selectedReward);
+            });
+            
+            giveUpBtn.addEventListener('click', () => {
+                document.body.removeChild(modalOverlay);
+                mockGame.restartLevel();
+            });
+            
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    document.body.removeChild(modalOverlay);
+                    mockGame.restartLevel();
+                }
+            });
+        }
+
+        // General Ad Choice Dialog
+        function showAdChoiceDialog() {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.id = 'adChoiceModal';
+            modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50';
+            
+            modalOverlay.innerHTML = `
+                <div class="bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 rounded-2xl p-8 mx-4 max-w-md w-full shadow-2xl border border-blue-500/30">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4">🎬</div>
+                        <h2 class="text-2xl font-bold text-white mb-2">Choose Your Reward</h2>
+                        <p class="text-blue-200 mb-6">How would you like to watch the ad?</p>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="bg-yellow-800/40 rounded-lg p-4 border border-yellow-500/50 hover:bg-yellow-800/60 transition-colors cursor-pointer" id="skipAdChoice">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-left">
+                                        <h3 class="text-lg font-semibold text-yellow-300">Quick Skip</h3>
+                                        <p class="text-yellow-100 text-sm">Skip after 15 seconds</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-yellow-400">+20s</div>
+                                        <div class="text-xs text-yellow-300">Fast reward</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-green-800/40 rounded-lg p-4 border border-green-500/50 hover:bg-green-800/60 transition-colors cursor-pointer" id="fullAdChoice">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-left">
+                                        <h3 class="text-lg font-semibold text-green-300">Full Watch</h3>
+                                        <p class="text-green-100 text-sm">Complete entire ad</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-green-400">+30s</div>
+                                        <div class="text-xs text-green-300">Best reward</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button id="startChosenAd" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors mb-3 w-full">
+                                Start Ad
+                            </button>
+                            <button id="cancelAdChoice" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors w-full">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modalOverlay);
+            
+            const startAdBtn = document.getElementById('startChosenAd');
+            const cancelBtn = document.getElementById('cancelAdChoice');
+            const skipChoice = document.getElementById('skipAdChoice');
+            const fullChoice = document.getElementById('fullAdChoice');
+            
+            let selectedChoice = 'full';
+            
+            skipChoice.addEventListener('click', () => {
+                skipChoice.classList.add('ring-2', 'ring-yellow-400');
+                fullChoice.classList.remove('ring-2', 'ring-green-400');
+                selectedChoice = 'skip';
+                startAdBtn.textContent = '🎬 Start Ad (Skip → +20s)';
+            });
+            
+            fullChoice.addEventListener('click', () => {
+                fullChoice.classList.add('ring-2', 'ring-green-400');
+                skipChoice.classList.remove('ring-2', 'ring-yellow-400');
+                selectedChoice = 'full';
+                startAdBtn.textContent = '🎬 Start Ad (Full → +30s)';
+            });
+            
+            fullChoice.classList.add('ring-2', 'ring-green-400');
+            startAdBtn.textContent = '🎬 Start Ad (Full → +30s)';
+            
+            startAdBtn.addEventListener('click', () => {
+                document.body.removeChild(modalOverlay);
+                simulateEnhancedRewardedAd(selectedChoice);
+            });
+            
+            cancelBtn.addEventListener('click', () => {
+                document.body.removeChild(modalOverlay);
+            });
+            
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    document.body.removeChild(modalOverlay);
+                }
+            });
+        }
+
+        // Enhanced Rewarded Ad Simulation
+        function simulateEnhancedRewardedAd(preferredReward = 'full') {
+            const adOverlay = document.createElement('div');
+            adOverlay.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+            
+            const skipReward = 20;
+            const fullReward = 30;
+            
+            adOverlay.innerHTML = `
+                <div class="bg-white p-8 rounded-lg text-center max-w-sm mx-4">
+                    <h3 class="text-xl font-bold mb-4">🎬 Rewarded Ad</h3>
+                    <p class="mb-2 text-gray-600">Your choice: <strong>${preferredReward === 'skip' ? 'Skip for +20s' : 'Watch full for +30s'}</strong></p>
+                    <p class="mb-6 text-sm text-gray-500">You can always change your mind during the ad!</p>
+                    <div class="mb-4">
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-blue-600 h-3 rounded-full ad-progress" style="width: 0%"></div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">Ad progress: <span id="adTimer">30</span>s remaining</p>
+                    </div>
+                    
+                    <div class="space-y-2 mb-4">
+                        <button id="skipAdEarly" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded w-full" disabled>
+                            Skip Now → +20s (Available after 15s)
+                        </button>
+                        <button id="continueWatching" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full" disabled>
+                            Keep Watching → +30s (Wait for completion)
+                        </button>
+                    </div>
+                    
+                    <button id="closeAdFinal" class="bg-gray-400 text-gray-600 px-4 py-2 rounded cursor-not-allowed w-full" disabled>
+                        Close Ad (Choose reward first)
+                    </button>
+                    
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                        <p class="text-xs text-blue-800">
+                            💡 <strong>Tip:</strong> In real ads, you'll get the same clear choice between skip (+20s) and full watch (+30s)
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(adOverlay);
+            
+            const closeBtn = document.getElementById('closeAdFinal');
+            const skipBtn = document.getElementById('skipAdEarly');
+            const continueBtn = document.getElementById('continueWatching');
+            
+            let userMadeChoice = false;
+            let chosenReward = 0;
+            
+            let timeLeft = 30;
+            const timer = setInterval(() => {
+                timeLeft--;
+                const timerEl = document.getElementById('adTimer');
+                const progressEl = document.querySelector('.ad-progress');
+                
+                if (timerEl) timerEl.textContent = timeLeft;
+                if (progressEl) progressEl.style.width = ((30 - timeLeft) / 30 * 100) + '%';
+                
+                if (timeLeft <= 15 && skipBtn && skipBtn.disabled) {
+                    skipBtn.disabled = false;
+                    skipBtn.className = 'bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded w-full cursor-pointer';
+                    skipBtn.textContent = 'Skip Now → +20s';
+                    
+                    skipBtn.onclick = () => {
+                        if (!userMadeChoice) {
+                            userMadeChoice = true;
+                            chosenReward = 20;
+                            clearInterval(timer);
+                            
+                            skipBtn.className = 'bg-yellow-600 text-white px-4 py-2 rounded w-full';
+                            skipBtn.textContent = '✓ Skipped - You get +20s';
+                            continueBtn.disabled = true;
+                            continueBtn.className = 'bg-gray-400 text-gray-600 px-4 py-2 rounded w-full cursor-not-allowed';
+                            
+                            closeBtn.disabled = false;
+                            closeBtn.className = 'bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded cursor-pointer w-full';
+                            closeBtn.textContent = 'Collect Reward (+20s)';
+                            closeBtn.onclick = () => {
+                                adOverlay.remove();
+                                mockGame.onAdRewardEarned(chosenReward);
+                            };
+                        }
+                    };
+                }
+                
+                if (continueBtn && continueBtn.disabled && timeLeft < 30) {
+                    continueBtn.disabled = false;
+                    continueBtn.className = 'bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full cursor-pointer';
+                    continueBtn.textContent = 'Keep Watching → +30s';
+                    
+                    continueBtn.onclick = () => {
+                        if (!userMadeChoice) {
+                            continueBtn.className = 'bg-green-600 text-white px-4 py-2 rounded w-full';
+                            continueBtn.textContent = '✓ Watching full ad for +30s';
+                            skipBtn.disabled = true;
+                            skipBtn.className = 'bg-gray-400 text-gray-600 px-4 py-2 rounded w-full cursor-not-allowed';
+                            skipBtn.textContent = 'Skip option disabled';
+                        }
+                    };
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    
+                    if (!userMadeChoice) {
+                        chosenReward = 30;
+                        userMadeChoice = true;
+                    }
+                    
+                    if (chosenReward === 0) {
+                        chosenReward = 30;
+                    }
+                    
+                    if (timerEl) timerEl.textContent = '0';
+                    if (progressEl) progressEl.style.width = '100%';
+                    
+                    if (closeBtn) {
+                        closeBtn.disabled = false;
+                        closeBtn.className = 'bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded cursor-pointer w-full';
+                        closeBtn.textContent = `Collect Reward (+${chosenReward}s)`;
+                        closeBtn.onclick = () => {
+                            adOverlay.remove();
+                            mockGame.onAdRewardEarned(chosenReward);
+                        };
+                    }
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

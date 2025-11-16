@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ball Expression System Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .level-test {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .ball-info {
+            display: inline-block;
+            margin: 5px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .color-0 { background-color: #FF3B30; color: white; }
+        .color-1 { background-color: #FF9500; color: white; }
+        .color-2 { background-color: #FFCC02; color: black; }
+        .color-3 { background-color: #34C759; color: white; }
+        .color-4 { background-color: #00C7BE; color: white; }
+        .color-5 { background-color: #007AFF; color: white; }
+        .color-6 { background-color: #5856D6; color: white; }
+        .color-7 { background-color: #AF52DE; color: white; }
+        
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .test-pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .test-fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 Ball Expression System Test</h1>
+    
+    <div class="test-container">
+        <h2>Expression System Status</h2>
+        <div id="systemStatus">Loading...</div>
+        
+        <button onclick="runBasicTests()">Run Basic Tests</button>
+        <button onclick="testLevelConsistency()">Test Level Consistency</button>
+        <button onclick="testBackwardCompatibility()">Test Backward Compatibility</button>
+        <button onclick="clearResults()">Clear Results</button>
+    </div>
+    
+    <div class="test-container">
+        <h2>Expression Examples</h2>
+        <div id="expressionExamples"></div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Test Results</h2>
+        <div id="testResults"></div>
+    </div>
+    
+    <div class="test-container">
+        <h2>Level Expression Mapping</h2>
+        <div id="levelMappings"></div>
+    </div>
+
+    <script src="src/js/ball-expressions.js"></script>
+    <script>
+        let expressionSystem;
+        
+        // Initialize the expression system
+        function initializeSystem() {
+            try {
+                expressionSystem = new BallExpressionSystem();
+                document.getElementById('systemStatus').innerHTML = `
+                    <div class="test-pass">✅ Expression System Initialized Successfully</div>
+                    <p><strong>Available Expressions:</strong> ${expressionSystem.getAllExpressions().join(', ')}</p>
+                    <p><strong>Cache Size:</strong> ${expressionSystem.getCacheSize()}</p>
+                `;
+                
+                showExpressionExamples();
+            } catch (error) {
+                document.getElementById('systemStatus').innerHTML = `
+                    <div class="test-fail">❌ Failed to Initialize: ${error.message}</div>
+                `;
+            }
+        }
+        
+        function showExpressionExamples() {
+            const examples = document.getElementById('expressionExamples');
+            let html = '<h3>Level 1 Examples (Colors 0-4):</h3>';
+            
+            for (let color = 0; color < 5; color++) {
+                const expression = expressionSystem.getExpressionForColor(1, color);
+                html += `<span class="ball-info color-${color}">Color ${color}: ${expression}</span>`;
+            }
+            
+            html += '<h3>Level 50 Examples (Colors 0-4):</h3>';
+            for (let color = 0; color < 5; color++) {
+                const expression = expressionSystem.getExpressionForColor(50, color);
+                html += `<span class="ball-info color-${color}">Color ${color}: ${expression}</span>`;
+            }
+            
+            html += '<h3>Level 500 Examples (Colors 0-7):</h3>';
+            for (let color = 0; color < 8; color++) {
+                const expression = expressionSystem.getExpressionForColor(500, color);
+                html += `<span class="ball-info color-${color}">Color ${color}: ${expression}</span>`;
+            }
+            
+            examples.innerHTML = html;
+        }
+        
+        function runBasicTests() {
+            const results = document.getElementById('testResults');
+            let html = '<h3>Basic Tests:</h3>';
+            let allPassed = true;
+            
+            // Test 1: Expression generation
+            try {
+                const expression = expressionSystem.getExpressionForColor(1, 0);
+                const validExpressions = ['angry', 'laughing', 'crying', 'surprised', 'sleeping'];
+                const isValid = validExpressions.includes(expression);
+                
+                html += `<div class="test-result ${isValid ? 'test-pass' : 'test-fail'}">
+                    Test 1: Expression Generation - ${isValid ? '✅ PASS' : '❌ FAIL'}
+                    <br>Generated: "${expression}" (Valid: ${isValid})
+                </div>`;
+                
+                if (!isValid) allPassed = false;
+            } catch (error) {
+                html += `<div class="test-result test-fail">Test 1: Expression Generation - ❌ FAIL<br>Error: ${error.message}</div>`;
+                allPassed = false;
+            }
+            
+            // Test 2: Ball object creation
+            try {
+                const ballObject = expressionSystem.convertBallToObject(2, 10);
+                const hasRequiredProps = ballObject.hasOwnProperty('color') && ballObject.hasOwnProperty('expression');
+                const correctColor = ballObject.color === 2;
+                const validExpression = ['angry', 'laughing', 'crying', 'surprised', 'sleeping'].includes(ballObject.expression);
+                
+                const isValid = hasRequiredProps && correctColor && validExpression;
+                
+                html += `<div class="test-result ${isValid ? 'test-pass' : 'test-fail'}">
+                    Test 2: Ball Object Creation - ${isValid ? '✅ PASS' : '❌ FAIL'}
+                    <br>Object: ${JSON.stringify(ballObject)}
+                    <br>Has props: ${hasRequiredProps}, Correct color: ${correctColor}, Valid expression: ${validExpression}
+                </div>`;
+                
+                if (!isValid) allPassed = false;
+            } catch (error) {
+                html += `<div class="test-result test-fail">Test 2: Ball Object Creation - ❌ FAIL<br>Error: ${error.message}</div>`;
+                allPassed = false;
+            }
+            
+            // Test 3: Color extraction
+            try {
+                const ballObject = { color: 3, expression: 'laughing' };
+                const numberBall = 3;
+                
+                const colorFromObject = expressionSystem.getBallColor(ballObject);
+                const colorFromNumber = expressionSystem.getBallColor(numberBall);
+                
+                const isValid = colorFromObject === 3 && colorFromNumber === 3;
+                
+                html += `<div class="test-result ${isValid ? 'test-pass' : 'test-fail'}">
+                    Test 3: Color Extraction - ${isValid ? '✅ PASS' : '❌ FAIL'}
+                    <br>From object: ${colorFromObject}, From number: ${colorFromNumber}
+                </div>`;
+                
+                if (!isValid) allPassed = false;
+            } catch (error) {
+                html += `<div class="test-result test-fail">Test 3: Color Extraction - ❌ FAIL<br>Error: ${error.message}</div>`;
+                allPassed = false;
+            }
+            
+            html += `<div class="test-result ${allPassed ? 'test-pass' : 'test-fail'}">
+                <strong>Overall Basic Tests: ${allPassed ? '✅ ALL PASSED' : '❌ SOME FAILED'}</strong>
+            </div>`;
+            
+            results.innerHTML = html;
+        }
+        
+        function testLevelConsistency() {
+            const results = document.getElementById('testResults');
+            let html = results.innerHTML + '<h3>Level Consistency Tests:</h3>';
+            let allPassed = true;
+            
+            // Test same color, same level = same expression
+            try {
+                const level = 25;
+                const color = 1;
+                
+                const expr1 = expressionSystem.getExpressionForColor(level, color);
+                const expr2 = expressionSystem.getExpressionForColor(level, color);
+                const expr3 = expressionSystem.getExpressionForColor(level, color);
+                
+                const isConsistent = expr1 === expr2 && expr2 === expr3;
+                
+                html += `<div class="test-result ${isConsistent ? 'test-pass' : 'test-fail'}">
+                    Test 4: Same Level/Color Consistency - ${isConsistent ? '✅ PASS' : '❌ FAIL'}
+                    <br>Level ${level}, Color ${color}: "${expr1}", "${expr2}", "${expr3}"
+                </div>`;
+                
+                if (!isConsistent) allPassed = false;
+            } catch (error) {
+                html += `<div class="test-result test-fail">Test 4: Level Consistency - ❌ FAIL<br>Error: ${error.message}</div>`;
+                allPassed = false;
+            }
+            
+            // Test different levels have different distributions
+            try {
+                const color = 0;
+                const expressions = [];
+                
+                for (let level = 1; level <= 100; level += 10) {
+                    expressions.push(expressionSystem.getExpressionForColor(level, color));
+                }
+                
+                const uniqueExpressions = [...new Set(expressions)];
+                const hasVariety = uniqueExpressions.length > 2; // Should have variety across levels
+                
+                html += `<div class="test-result ${hasVariety ? 'test-pass' : 'test-fail'}">
+                    Test 5: Expression Variety Across Levels - ${hasVariety ? '✅ PASS' : '❌ FAIL'}
+                    <br>Color ${color} across 10 levels: ${expressions.join(', ')}
+                    <br>Unique expressions: ${uniqueExpressions.length}
+                </div>`;
+                
+                if (!hasVariety) allPassed = false;
+            } catch (error) {
+                html += `<div class="test-result test-fail">Test 5: Expression Variety - ❌ FAIL<br>Error: ${error.message}</div>`;
+                allPassed = false;
+            }
+            
+            html += `<div class="test-result ${allPassed ? 'test-pass' : 'test-fail'}">
+                <strong>Overall Consistency Tests: ${allPassed ? '✅ ALL PASSED' : '❌ SOME FAILED'}</strong>
+            </div>`;
+            
+            results.innerHTML = html;
+        }
+        
+        function testBackwardCompatibility() {
+            const results = document.getElementById('testResults');
+            let html = results.innerHTML + '<h3>Backward Compatibility Tests:</h3>';
+            let allPassed = true;
+            
+            // Test handling old format
+            try {
+                const oldFormatBall = 2; // Old format: just a number
+                const newFormatBall = { color: 2, expression: 'angry' }; // New format
+                
+                const colorFromOld = expressionSystem.getBallColor(oldFormatBall);
+                const colorFromNew = expressionSystem.getBallColor(newFormatBall);
+                
+                const exprFromOld = expressionSystem.getBallExpression(oldFormatBall, 1, 2);
+                const exprFromNew = expressionSystem.getBallExpression(newFormatBall, 1, 2);
+                
+                const isValid = colorFromOld === 2 && colorFromNew === 2 && 
+                               typeof exprFromOld === 'string' && exprFromNew === 'angry';
+                
+                html += `<div class="test-result ${isValid ? 'test-pass' : 'test-fail'}">
+                    Test 6: Backward Compatibility - ${isValid ? '✅ PASS' : '❌ FAIL'}
+                    <br>Old format color: ${colorFromOld}, expression: ${exprFromOld}
+                    <br>New format color: ${colorFromNew}, expression: ${exprFromNew}
+                </div>`;
+                
+                if (!isValid) allPassed = false;
+            } catch (error) {
+                html += `<div class="test-result test-fail">Test 6: Backward Compatibility - ❌ FAIL<br>Error: ${error.message}</div>`;
+                allPassed = false;
+            }
+            
+            html += `<div class="test-result ${allPassed ? 'test-pass' : 'test-fail'}">
+                <strong>Overall Compatibility Tests: ${allPassed ? '✅ ALL PASSED' : '❌ SOME FAILED'}</strong>
+            </div>`;
+            
+            results.innerHTML = html;
+            
+            // Show level mappings
+            showLevelMappings();
+        }
+        
+        function showLevelMappings() {
+            const mappings = document.getElementById('levelMappings');
+            let html = '';
+            
+            const testLevels = [1, 10, 50, 100, 250, 500, 750, 1000];
+            
+            for (let level of testLevels) {
+                html += `<div class="level-test">
+                    <h4>Level ${level} Expression Mapping (Colors 0-5):</h4>`;
+                
+                for (let color = 0; color < 6; color++) {
+                    const expression = expressionSystem.getExpressionForColor(level, color);
+                    html += `<span class="ball-info color-${color}">C${color}: ${expression}</span>`;
+                }
+                
+                html += '</div>';
+            }
+            
+            mappings.innerHTML = html;
+        }
+        
+        function clearResults() {
+            document.getElementById('testResults').innerHTML = '';
+            document.getElementById('levelMappings').innerHTML = '';
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', initializeSystem);
+    </script>
+</body>
+</html>

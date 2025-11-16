@@ -1,0 +1,156 @@
+{
+  "google_play_games": {
+    "app_id": "YOUR_GOOGLE_PLAY_GAMES_APP_ID",
+    "achievements": [
+      { 
+        "id": "achievement_first_level",
+        "name": "First Steps",
+        "description": "Complete your first level",
+        "type": "INCREMENTAL",
+        "steps": 1,
+        "icon": "achievement_first_level.png"
+      },
+      {
+        "id": "achievement_ten_levels",
+        "name": "Getting Started",
+        "description": "Complete 10 levels",
+        "type": "INCREMENTAL",
+        "steps": 10,
+        "icon": "achievement_ten_levels.png"
+      },
+      {
+        "id": "achievement_fifty_levels",
+        "name": "Puzzle Master",
+        "description": "Complete 50 levels",
+        "type": "INCREMENTAL",
+        "steps": 50,
+        "icon": "achievement_fifty_levels.png"
+      },
+      {
+        "id": "achievement_hundred_levels",
+        "name": "Ball Sort Champion",
+        "description": "Complete 100 levels",
+        "type": "INCREMENTAL",
+        "steps": 100,
+        "icon": "achievement_hundred_levels.png"
+      },
+      {
+        "id": "achievement_all_levels",
+        "name": "Ultimate Champion",
+        "description": "Complete all 200 levels",
+        "type": "INCREMENTAL",
+        "steps": 200,
+        "icon": "achievement_all_levels.png"
+      },
+      {
+        "id": "achievement_no_hints",
+        "name": "Pure Skill",
+        "description": "Complete 10 levels without using hints",
+        "type": "INCREMENTAL",
+        "steps": 10,
+        "icon": "achievement_no_hints.png"
+      },
+      {
+        "id": "achievement_speed_demon",
+        "name": "Speed Demon",
+        "description": "Complete a level in under 30 seconds",
+        "type": "STANDARD",
+        "icon": "achievement_speed_demon.png"
+      },
+      {
+        "id": "achievement_perfectionist",
+        "name": "Perfectionist",
+        "description": "Complete 5 levels with minimum moves",
+        "type": "INCREMENTAL",
+        "steps": 5,
+        "icon": "achievement_perfectionist.png"
+      },
+      {
+        "id": "achievement_comeback_king",
+        "name": "Comeback King",
+        "description": "Complete a level after using restart 3 times",
+        "type": "STANDARD",
+        "icon": "achievement_comeback_king.png"
+      },
+      {
+        "id": "achievement_premium_user",
+        "name": "Premium Player",
+        "description": "Unlock premium features",
+        "type": "STANDARD",
+        "icon": "achievement_premium_user.png"
+      }
+    ],
+    "leaderboards": [
+      {
+        "id": "leaderboard_total_levels",
+        "name": "Total Levels Completed",
+        "description": "See who has completed the most levels",
+        "score_order": "LARGER_IS_BETTER",
+        "score_format": "NUMERIC"
+      },
+      {
+        "id": "leaderboard_fastest_completion",
+        "name": "Fastest Level Completion",
+        "description": "Fastest time to complete any level",
+        "score_order": "SMALLER_IS_BETTER",
+        "score_format": "TIME"
+      },
+      {
+        "id": "leaderboard_minimum_moves",
+        "name": "Minimum Moves Challenge",
+        "description": "Levels completed with minimum moves",
+        "score_order": "LARGER_IS_BETTER",
+        "score_format": "NUMERIC"
+      },
+      {
+        "id": "leaderboard_daily_challenge",
+        "name": "Daily Challenge Score",
+        "description": "Daily challenge completion score",
+        "score_order": "LARGER_IS_BETTER",
+        "score_format": "NUMERIC"
+      },
+      {
+        "id": "leaderboard_weekly_score",
+        "name": "Weekly High Score",
+        "description": "Weekly cumulative score",
+        "score_order": "LARGER_IS_BETTER",
+        "score_format": "NUMERIC"
+      }
+    ],
+    "events": [
+      {
+        "id": "event_level_completed",
+        "name": "Level Completed",
+        "description": "Track when players complete levels"
+      },
+      {
+        "id": "event_hint_used",
+        "name": "Hint Used",
+        "description": "Track hint usage"
+      },
+      {
+        "id": "event_restart_used",
+        "name": "Restart Used",
+        "description": "Track restart usage"
+      },
+      {
+        "id": "event_ad_watched",
+        "name": "Ad Watched",
+        "description": "Track ad completion"
+      },
+      {
+        "id": "event_premium_purchased",
+        "name": "Premium Purchased",
+        "description": "Track premium purchases"
+      }
+    ],
+    "settings": {
+      "auto_sign_in": true,
+      "show_achievements_button": true,
+      "show_leaderboards_button": true,
+      "cloud_save_enabled": true,
+      "popup_gravity": "TOP",
+      "popup_view": "DEFAULT"
+    }
+  }
+}

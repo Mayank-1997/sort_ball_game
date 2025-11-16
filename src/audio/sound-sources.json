@@ -1,0 +1,41 @@
+{
+  "sound_sources": {
+    "freesound_examples": {
+      "note": "These are example searches - you'll need a free Freesound.org account to download",
+      "select": "Search for: 'ui click', 'button click', 'soft chime'",
+      "pop": "Search for: 'pop', 'ui pop', 'bubble pop'", 
+      "transfer": "Search for: 'swoosh', 'slide', 'item pickup'",
+      "error": "Search for: 'error beep', 'buzz', 'wrong'",
+      "victory": "Search for: 'level complete', 'victory', 'success chime'",
+      "congratulations": "Search for: 'fanfare', 'celebration', 'achievement'"
+    },
+    "public_domain_direct": {
+      "note": "These are direct links to public domain sounds that can be downloaded immediately",
+      "basic_click": "https://www.soundjay.com/misc/sounds/click1.wav",
+      "simple_beep": "https://www.soundjay.com/misc/sounds/beep-7.wav",
+      "error_buzz": "https://www.soundjay.com/misc/sounds/fail-buzzer-02.wav"
+    },
+    "alternative_sources": [
+      "BBC Sound Effects Library: https://sound-effects.bbcrewind.co.uk/",
+      "OpenGameArt.org: https://opengameart.org/art-search-advanced?keys=&title=&field_art_tags_tid=&name=&field_art_type_tid[]=13&sort_by=count&sort_order=DESC",
+      "Pixabay Sounds: https://pixabay.com/sound-effects/",
+      "YouTube Audio Library: https://studio.youtube.com/channel/UCyUWNfBP5Xw8l8S1p8D-xjw/music"
+    ]
+  },
+  "quick_setup_guide": {
+    "step1": "Visit any of the sources above",
+    "step2": "Download 7 short sound files (0.1-2 seconds each)",
+    "step3": "Convert to MP3 format if needed (use online converters like convertio.co)",
+    "step4": "Rename files to: select.mp3, pop.mp3, transfer.mp3, error.mp3, warning.mp3, victory.mp3, congratulations.mp3",
+    "step5": "Place all files in this /src/audio/ folder",
+    "step6": "Refresh the game page and test sounds"
+  },
+  "recommended_characteristics": {
+    "select": "Pleasant, soft click or chime sound",
+    "pop": "Light pop or tap sound",
+    "transfer": "Satisfying swoosh or slide sound", 
+    "error": "Clear but not harsh error beep",
+    "victory": "Celebratory chime or short fanfare",
+    "congratulations": "Longer celebration sound or musical sequence"
+  }
+}

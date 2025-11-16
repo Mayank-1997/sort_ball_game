@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samsung S20 Ultra - TopBar Height Test</title>
+    <link rel="stylesheet" href="src/css/styles.css">
+    <style>
+        /* Test-specific styles to simulate Samsung S20 Ultra */
+        .test-device {
+            width: 384px;
+            height: 854px;
+            border: 20px solid #333;
+            border-radius: 25px;
+            margin: 20px auto;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .test-device::before {
+            content: 'Samsung S20 Ultra Simulation';
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            z-index: 100;
+        }
+        
+        .test-content {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .height-indicator {
+            position: fixed;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 1000;
+        }
+        
+        .controls {
+            padding: 20px;
+            background: #f5f5f5;
+            margin: 20px;
+            border-radius: 10px;
+        }
+        
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <div class="height-indicator" id="heightIndicator">
+        TopBar Height: <span id="topBarHeight">--</span><br>
+        Viewport Height: <span id="viewportHeight">--</span><br>
+        TopBar %: <span id="topBarPercentage">--</span>
+    </div>
+
+    <div class="info">
+        <h2>📱 Samsung S20 Ultra Mobile Layout Test</h2>
+        <p><strong>Samsung S20 Ultra Specifications:</strong></p>
+        <ul>
+            <li>Screen Size: 6.9 inches</li>
+            <li>Resolution: 1440 × 3200 pixels (20:9 aspect ratio)</li>
+            <li>CSS Viewport: ~384×854px (with device scaling)</li>
+            <li>Problem: TopBar was taking ~50% of screen, game canvas too small</li>
+            <li>Target: Proper space distribution for mobile gaming</li>
+        </ul>
+        
+        <p><strong>New Layout Requirements:</strong></p>
+        <ul>
+            <li>TopBar: 10% of viewport height</li>
+            <li>Game Canvas: 70% of viewport height</li>
+            <li>Banner Ad Container: 10% of viewport height</li>
+            <li>Bottom Bar: 10% of viewport height</li>
+            <li>Info Panel: Hidden on mobile</li>
+        </ul>
+    </div>
+
+    <div class="controls">
+        <h3>🧪 Test Controls</h3>
+        <button onclick="simulateS20Ultra()">Simulate S20 Ultra (384×854)</button>
+        <button onclick="simulateNormalPhone()">Simulate Normal Phone (375×667)</button>
+        <button onclick="measureTopBar()">Measure TopBar Height</button>
+        <button onclick="testScrolling()">Test TopBar Scrolling</button>
+    </div>
+
+    <div class="test-device" id="testDevice">
+        <div class="test-content">
+            <!-- Copy the actual game structure for testing -->
+            <div class="game-background">
+                <div class="floating-elements">
+                    <!-- Background elements would go here -->
+                </div>
+            </div>
+
+            <!-- Game Container -->
+            <div id="gameContainer" class="container mx-auto px-4 py-6">
+                <!-- Top Bar -->
+                <div id="topBar" class="flex justify-between items-center mb-6 bg-white/20 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+                    <div class="flex items-center space-x-4">
+                        <h1 class="text-2xl font-bold text-white">Ball Sort Puzzle</h1>
+                        <div class="text-white">
+                            <span class="bg-white/20 px-3 py-1 rounded-lg">Level: <span id="levelDisplay">1/1000</span></span>
+                        </div>
+                        <div class="text-white">
+                            <span class="bg-gradient-to-r from-green-500 to-blue-500 px-3 py-1 rounded-lg text-sm font-semibold" id="difficultyDisplay">Very Easy</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 text-white">
+                        <div>
+                            <span class="bg-white/20 px-3 py-1 rounded-lg">Time: <span id="timerDisplay">01:00</span></span>
+                        </div>
+                        <div>
+                            <span class="bg-white/20 px-3 py-1 rounded-lg">Moves: <span id="movesDisplay">0</span></span>
+                        </div>
+                        <button id="pauseButton" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors">
+                            ⏸️ Pause
+                        </button>
+                        <button id="hintButton" class="bg-yellow-500/20 hover:bg-yellow-500/30 px-4 py-2 rounded-lg transition-colors">
+                            💡 Hint
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Game Canvas Area -->
+                <div class="flex justify-center mb-6">
+                    <canvas id="gameCanvas" width="800" height="600" 
+                            class="rounded-xl shadow-2xl border-4 border-white/20 max-w-full h-auto transition-all duration-300 ease-in-out">
+                        Your browser does not support the canvas element.
+                    </canvas>
+                </div>
+
+                <!-- Bottom Bar -->
+                <div id="bottomBar" class="flex justify-center space-x-4 mb-6">
+                    <button id="undoButton" class="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                        ↶ Undo
+                    </button>
+                    <button id="restartButton" class="bg-red-500/20 hover:bg-red-500/30 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105">
+                        🔄 Restart
+                    </button>
+                    <button id="skipButton" class="bg-blue-500/20 hover:bg-blue-500/30 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105">
+                        ⏭️ Skip Level
+                    </button>
+                </div>
+
+                <!-- Info Panel (should be hidden on mobile) -->
+                <div id="infoPanel" class="bg-white/20 backdrop-blur-sm rounded-xl p-4 shadow-lg mb-4">
+                    <p class="text-white">This info panel should be hidden on mobile devices.</p>
+                </div>
+
+                <!-- Banner Ad Container -->
+                <div id="bannerAdContainer" class="bg-yellow-500/20 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+                    <div class="banner-ad-placeholder text-white text-center">
+                        📢 Banner Ad Area (10% of viewport)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info">
+        <h3>✅ Expected Results:</h3>
+        <ul>
+            <li>TopBar height should be <strong>exactly 10% of viewport height</strong></li>
+            <li>Game Canvas should be <strong>exactly 70% of viewport height</strong></li>
+            <li>Bottom Bar should be <strong>exactly 10% of viewport height</strong></li>
+            <li>Banner Ad Container should be <strong>exactly 10% of viewport height</strong></li>
+            <li>Info Panel should be <strong>completely hidden</strong></li>
+            <li>On Samsung S20 Ultra (854px height): TopBar ≈ 85px, Canvas ≈ 598px</li>
+            <li>Layout should use full viewport height (100vh) with proper flex distribution</li>
+        </ul>
+    </div>
+
+    <script>
+        function measureTopBar() {
+            const topBar = document.getElementById('topBar');
+            const gameCanvas = document.getElementById('gameCanvas');
+            const bottomBar = document.getElementById('bottomBar');
+            const bannerAd = document.querySelector('#bannerAdContainer, .banner-ad-placeholder');
+            const infoPanel = document.getElementById('infoPanel');
+            
+            const topBarHeight = topBar.offsetHeight;
+            const canvasHeight = gameCanvas.offsetHeight;
+            const bottomBarHeight = bottomBar.offsetHeight;
+            const bannerHeight = bannerAd ? bannerAd.offsetHeight : 0;
+            const viewportHeight = window.innerHeight;
+            
+            const topBarPercent = ((topBarHeight / viewportHeight) * 100).toFixed(1);
+            const canvasPercent = ((canvasHeight / viewportHeight) * 100).toFixed(1);
+            const bottomPercent = ((bottomBarHeight / viewportHeight) * 100).toFixed(1);
+            const bannerPercent = ((bannerHeight / viewportHeight) * 100).toFixed(1);
+            
+            document.getElementById('topBarHeight').textContent = topBarHeight + 'px (' + topBarPercent + '%)';
+            document.getElementById('viewportHeight').textContent = viewportHeight + 'px';
+            document.getElementById('topBarPercentage').textContent = 
+                `Canvas: ${canvasPercent}%, Bottom: ${bottomPercent}%, Banner: ${bannerPercent}%`;
+            
+            // Check if it meets all requirements
+            const topBarOK = topBarPercent <= 12; // Allow some tolerance
+            const canvasOK = canvasPercent >= 65; // Should be around 70%
+            const infoPanelHidden = infoPanel && window.getComputedStyle(infoPanel).display === 'none';
+            
+            const allGood = topBarOK && canvasOK && infoPanelHidden;
+            const indicator = document.getElementById('heightIndicator');
+            indicator.style.background = allGood ? 'rgba(76, 175, 80, 0.9)' : 'rgba(244, 67, 54, 0.9)';
+            
+            console.log(`Mobile Layout Test:
+            TopBar: ${topBarHeight}px (${topBarPercent}%) - Target: 10%
+            Canvas: ${canvasHeight}px (${canvasPercent}%) - Target: 70%
+            BottomBar: ${bottomBarHeight}px (${bottomPercent}%) - Target: 10%
+            Banner: ${bannerHeight}px (${bannerPercent}%) - Target: 10%
+            InfoPanel Hidden: ${infoPanelHidden}`);
+            
+            alert(`Mobile Layout Test Results:
+            TopBar: ${topBarPercent}% ${topBarOK ? '✅' : '❌'} (Target: 10%)
+            Canvas: ${canvasPercent}% ${canvasOK ? '✅' : '❌'} (Target: 70%)
+            Bottom: ${bottomPercent}% (Target: 10%)
+            Banner: ${bannerPercent}% (Target: 10%)
+            InfoPanel Hidden: ${infoPanelHidden ? '✅' : '❌'}
+            
+            Overall: ${allGood ? '✅ PASSED' : '❌ NEEDS ADJUSTMENT'}`);
+        }
+        
+        function simulateS20Ultra() {
+            const device = document.getElementById('testDevice');
+            device.style.width = '384px';
+            device.style.height = '854px';
+            
+            // Simulate the viewport
+            const meta = document.querySelector('meta[name="viewport"]');
+            meta.content = 'width=384, height=854, initial-scale=1.0';
+            
+            setTimeout(measureTopBar, 500);
+        }
+        
+        function simulateNormalPhone() {
+            const device = document.getElementById('testDevice');
+            device.style.width = '375px';
+            device.style.height = '667px';
+            
+            // Simulate normal phone viewport
+            const meta = document.querySelector('meta[name="viewport"]');
+            meta.content = 'width=375, height=667, initial-scale=1.0';
+            
+            setTimeout(measureTopBar, 500);
+        }
+        
+        function testScrolling() {
+            const topBar = document.getElementById('topBar');
+            const currentOverflow = window.getComputedStyle(topBar).overflowY;
+            
+            alert(`TopBar scrolling capability:
+            overflow-y: ${currentOverflow}
+            scrollHeight: ${topBar.scrollHeight}px
+            clientHeight: ${topBar.clientHeight}px
+            ${topBar.scrollHeight > topBar.clientHeight ? '✅ Scrollable' : '⚠️ Not scrollable'}`);
+        }
+        
+        // Auto-measure on load
+        window.addEventListener('load', function() {
+            setTimeout(measureTopBar, 1000);
+        });
+        
+        // Update measurements on resize
+        window.addEventListener('resize', function() {
+            setTimeout(measureTopBar, 300);
+        });
+    </script>
+</body>
+</html>

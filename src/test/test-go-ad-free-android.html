@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Ad-Free Android Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-out { opacity: 0; transition: opacity 0.8s ease-out; }
+        .fade-in { opacity: 1; transition: opacity 0.8s ease-in; }
+        .game-background { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="game-background">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 max-w-md w-full">
+            <h1 class="text-3xl font-bold text-white text-center mb-8">
+                🧪 Go Ad-Free Android Test
+            </h1>
+            
+            <!-- Test Scenarios -->
+            <div class="space-y-4">
+                <!-- Test 1: Normal Purchase Flow -->
+                <div class="bg-blue-800/30 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-blue-300 mb-2">Test 1: Normal Purchase</h3>
+                    <p class="text-blue-100 text-sm mb-3">Test the complete purchase flow with confirmation dialog</p>
+                    <button id="testNormalPurchase" class="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-2 rounded-lg font-semibold">
+                        ✨ Go Ad-Free ($9.99)
+                    </button>
+                </div>
+                
+                <!-- Test 2: Already Premium User -->
+                <div class="bg-green-800/30 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-green-300 mb-2">Test 2: Already Premium</h3>
+                    <p class="text-green-100 text-sm mb-3">Test behavior when user is already premium</p>
+                    <button id="testAlreadyPremium" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg font-semibold">
+                        👑 Test Premium User
+                    </button>
+                </div>
+                
+                <!-- Test 3: Not Signed In -->
+                <div class="bg-red-800/30 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-red-300 mb-2">Test 3: Not Signed In</h3>
+                    <p class="text-red-100 text-sm mb-3">Test when user is not signed into Google Play</p>
+                    <button id="testNotSignedIn" class="w-full bg-red-600 text-white px-4 py-2 rounded-lg font-semibold">
+                        🔐 Test Not Signed In
+                    </button>
+                </div>
+                
+                <!-- Test 4: Purchase Failed -->
+                <div class="bg-purple-800/30 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-purple-300 mb-2">Test 4: Purchase Failed</h3>
+                    <p class="text-purple-100 text-sm mb-3">Test purchase failure scenario</p>
+                    <button id="testPurchaseFailed" class="w-full bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold">
+                        ❌ Test Purchase Failure
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Test Status Display -->
+            <div id="testStatus" class="mt-6 p-4 bg-gray-800/50 rounded-lg">
+                <h4 class="text-white font-semibold mb-2">Test Status:</h4>
+                <p id="statusText" class="text-gray-300 text-sm">Ready for testing...</p>
+            </div>
+            
+            <!-- Back to Game -->
+            <div class="mt-6 text-center">
+                <a href="../../index.html" class="text-blue-300 hover:text-blue-200 underline">
+                    ← Back to Game
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mock Android Environment -->
+    <script>
+        // Mock Google Play Games for testing
+        class MockGooglePlayGames {
+            constructor() {
+                this.signedIn = true;
+                this.premiumUser = false;
+            }
+            
+            isSignedIn() {
+                return this.signedIn;
+            }
+            
+            isPremiumUser() {
+                return this.premiumUser;
+            }
+            
+            async purchaseAdFree() {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(this.mockPurchaseResult);
+                    }, 1500); // Simulate network delay
+                });
+            }
+            
+            setSignedIn(status) {
+                this.signedIn = status;
+            }
+            
+            setPremiumUser(status) {
+                this.premiumUser = status;
+            }
+            
+            setMockPurchaseResult(result) {
+                this.mockPurchaseResult = result;
+            }
+        }
+        
+        // Mock game instance
+        class MockBallSortGame {
+            constructor() {
+                this.isPremium = false;
+                this.googlePlayGames = new MockGooglePlayGames();
+            }
+            
+            showAdFreeConfirmationDialog() {
+                const modalOverlay = document.createElement('div');
+                modalOverlay.id = 'adFreeConfirmationModal';
+                modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
+                
+                modalOverlay.innerHTML = `
+                    <div class="bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 rounded-2xl p-8 mx-4 max-w-md w-full shadow-2xl border border-purple-500/30">
+                        <div class="text-center">
+                            <div class="text-6xl mb-4">✨</div>
+                            <h2 class="text-2xl font-bold text-white mb-4">Go Ad-Free Premium</h2>
+                            
+                            <div class="bg-green-800/30 rounded-lg p-4 mb-4 border border-green-500/50">
+                                <h3 class="text-lg font-semibold text-green-300 mb-2">✅ What's Included:</h3>
+                                <p class="text-green-100 text-sm leading-relaxed">
+                                    Completely removes banner and level completion ads
+                                </p>
+                            </div>
+                            
+                            <div class="bg-yellow-800/30 rounded-lg p-4 mb-6 border border-yellow-500/50">
+                                <h3 class="text-lg font-semibold text-yellow-300 mb-2">⚠️ Please Note:</h3>
+                                <p class="text-yellow-100 text-sm leading-relaxed">
+                                    Time out ads will continue
+                                </p>
+                            </div>
+                            
+                            <div class="flex space-x-3">
+                                <button id="cancelAdFreePurchase" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors">
+                                    Cancel
+                                </button>
+                                <button id="confirmAdFreePurchase" class="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-4 py-3 rounded-lg font-semibold transition-colors">
+                                    Purchase $9.99
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modalOverlay);
+                
+                const cancelBtn = document.getElementById('cancelAdFreePurchase');
+                const confirmBtn = document.getElementById('confirmAdFreePurchase');
+                
+                cancelBtn.addEventListener('click', () => {
+                    document.body.removeChild(modalOverlay);
+                    updateStatus('Purchase cancelled by user', 'warning');
+                });
+                
+                confirmBtn.addEventListener('click', async () => {
+                    document.body.removeChild(modalOverlay);
+                    updateStatus('Processing purchase...', 'info');
+                    await this.processPremiumPurchase();
+                });
+                
+                modalOverlay.addEventListener('click', (e) => {
+                    if (e.target === modalOverlay) {
+                        document.body.removeChild(modalOverlay);
+                        updateStatus('Modal closed by overlay click', 'warning');
+                    }
+                });
+            }
+            
+            async processPremiumPurchase() {
+                try {
+                    if (this.googlePlayGames && this.googlePlayGames.isSignedIn()) {
+                        updateStatus('Starting Google Play Games purchase flow...', 'info');
+                        const success = await this.googlePlayGames.purchaseAdFree();
+                        if (success) {
+                            updateStatus('✅ Purchase successful! Banner and level completion ads removed.', 'success');
+                            alert('🎉 Purchase successful! Banner and level completion ads have been removed. Enjoy your premium experience!');
+                        } else {
+                            updateStatus('❌ Purchase failed or cancelled', 'error');
+                            alert('Purchase cancelled or failed. Please try again.');
+                        }
+                    } else {
+                        updateStatus('🔐 Google Play Games not available or not signed in', 'error');
+                        alert('Please sign in to Google Play Games first to make purchases.');
+                    }
+                } catch (error) {
+                    updateStatus('💥 Purchase flow error: ' + error.message, 'error');
+                    alert('Purchase failed. Please try again later.');
+                }
+            }
+        }
+        
+        // Initialize mock game
+        const mockGame = new MockBallSortGame();
+        
+        // Status update function
+        function updateStatus(message, type = 'info') {
+            const statusText = document.getElementById('statusText');
+            const colors = {
+                info: 'text-blue-300',
+                success: 'text-green-300',
+                warning: 'text-yellow-300',
+                error: 'text-red-300'
+            };
+            
+            statusText.textContent = message;
+            statusText.className = `text-sm ${colors[type] || 'text-gray-300'}`;
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+        
+        // Test event listeners
+        document.getElementById('testNormalPurchase').addEventListener('click', () => {
+            updateStatus('Testing normal purchase flow...', 'info');
+            mockGame.isPremium = false;
+            mockGame.googlePlayGames.setSignedIn(true);
+            mockGame.googlePlayGames.setPremiumUser(false);
+            mockGame.googlePlayGames.setMockPurchaseResult(true);
+            mockGame.showAdFreeConfirmationDialog();
+        });
+        
+        document.getElementById('testAlreadyPremium').addEventListener('click', () => {
+            updateStatus('Testing already premium user...', 'info');
+            mockGame.isPremium = true;
+            if (mockGame.isPremium || (mockGame.googlePlayGames && mockGame.googlePlayGames.isPremiumUser())) {
+                updateStatus('👑 User is already premium!', 'success');
+                alert('You are already a premium user! Enjoy your ad-free experience! 💎');
+            }
+        });
+        
+        document.getElementById('testNotSignedIn').addEventListener('click', () => {
+            updateStatus('Testing not signed in scenario...', 'info');
+            mockGame.isPremium = false;
+            mockGame.googlePlayGames.setSignedIn(false);
+            mockGame.showAdFreeConfirmationDialog();
+        });
+        
+        document.getElementById('testPurchaseFailed').addEventListener('click', () => {
+            updateStatus('Testing purchase failure...', 'info');
+            mockGame.isPremium = false;
+            mockGame.googlePlayGames.setSignedIn(true);
+            mockGame.googlePlayGames.setPremiumUser(false);
+            mockGame.googlePlayGames.setMockPurchaseResult(false);
+            mockGame.showAdFreeConfirmationDialog();
+        });
+        
+        updateStatus('Test environment loaded. Ready for testing!', 'success');
+    </script>
+</body>
+</html>

@@ -1,0 +1,618 @@
+/* =================================================================
+   FEATURE TUTORIAL SYSTEM STYLES
+   ================================================================= */
+
+/* Tutorial Overlay */
+.tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    pointer-events: none;
+}
+
+.tutorial-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(2px);
+}
+
+.tutorial-highlight {
+    position: absolute;
+    border: 3px solid #4CAF50;
+    box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.3), 
+                0 0 0 9999px rgba(0, 0, 0, 0.6);
+    z-index: 10001;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* Tutorial Tooltip */
+.tutorial-tooltip {
+    position: fixed;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    z-index: 10002;
+    pointer-events: auto;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    max-width: 400px;
+    min-width: 280px;
+    overflow: hidden;
+    animation: tooltipSlideIn 0.4s ease-out;
+}
+
+.tooltip-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tooltip-header h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.tooltip-progress {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.tooltip-content {
+    padding: 16px 24px;
+}
+
+.tooltip-content p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.tooltip-actions {
+    padding: 16px 24px 20px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+/* Tutorial Buttons */
+.btn-skip, .btn-prev, .btn-next, .btn-close, .btn-got-it {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-skip {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-skip:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.btn-prev {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+.btn-prev:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.btn-next, .btn-got-it {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.btn-next:hover, .btn-got-it:hover {
+    background: linear-gradient(45deg, #45a049, #3d8b40);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.btn-close {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.btn-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Tutorial Menu */
+.tutorial-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 10003;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tutorial-menu, .quick-tips, .tutorial-completion {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+    max-width: 500px;
+    width: 90%;
+    overflow: hidden;
+    animation: modalSlideUp 0.4s ease-out;
+}
+
+.tutorial-menu-content, .quick-tips-content, .completion-content {
+    padding: 32px;
+    text-align: center;
+    color: white;
+}
+
+.tutorial-menu-content h3, .quick-tips-content h3, .completion-content h3 {
+    margin: 0 0 16px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.tutorial-menu-content p {
+    margin: 0 0 24px;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tutorial-menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.btn-tutorial-option {
+    padding: 16px 24px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-tutorial-option:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.tutorial-menu-footer {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tutorial-menu-footer small {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+}
+
+/* Quick Tips */
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.tip-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.tip-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.tip-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.tip-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.4;
+}
+
+.btn-continue, .btn-start-game {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-continue:hover, .btn-start-game:hover {
+    background: linear-gradient(45deg, #45a049, #3d8b40);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+}
+
+/* Tutorial Completion */
+.completion-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    animation: celebrationBounce 1s ease-in-out infinite alternate;
+}
+
+.completion-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 24px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item strong {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    color: #4CAF50;
+    margin-bottom: 4px;
+}
+
+.stat-item span {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Feature Highlight Animations */
+.tutorial-pulse {
+    animation: tutorialPulse 2s ease-in-out infinite;
+}
+
+.tutorial-star-highlight {
+    animation: starGlow 2s ease-in-out infinite;
+}
+
+.tutorial-progress-animation {
+    animation: progressGlow 2s ease-in-out infinite;
+}
+
+.tutorial-timer-tick {
+    animation: timerTick 1s ease-in-out 3;
+}
+
+.tutorial-hint-glow {
+    animation: hintGlow 2s ease-in-out infinite;
+}
+
+.tutorial-restart-spin {
+    animation: restartSpin 1s ease-in-out;
+}
+
+.tutorial-settings-bounce {
+    animation: settingsBounce 1s ease-in-out 3;
+}
+
+/* Demo Elements */
+.tutorial-ad-demo, .tutorial-premium-demo, 
+.tutorial-leaderboard-demo, .tutorial-achievement-demo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    z-index: 10004;
+    color: white;
+    padding: 24px;
+    max-width: 350px;
+    animation: demoSlideIn 0.4s ease-out;
+}
+
+.ad-demo-content h4, .premium-demo-content h4,
+.leaderboard-demo-content h4, .achievement-demo-content h4 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    text-align: center;
+}
+
+.ad-options {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.ad-option {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    flex: 1;
+}
+
+.ad-duration {
+    font-size: 24px;
+    font-weight: 700;
+    color: #4CAF50;
+    margin-bottom: 4px;
+}
+
+.ad-reward {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.premium-demo-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0;
+}
+
+.premium-demo-content li {
+    padding: 8px 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.demo-rankings, .demo-achievements {
+    margin: 16px 0;
+}
+
+.ranking-item, .achievement {
+    padding: 8px 12px;
+    margin: 4px 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.ranking-item.current {
+    background: rgba(76, 175, 80, 0.3);
+    border: 1px solid rgba(76, 175, 80, 0.5);
+}
+
+.achievement {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.achievement.unlocked {
+    background: rgba(76, 175, 80, 0.2);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.achievement.locked {
+    background: rgba(255, 255, 255, 0.05);
+    opacity: 0.6;
+}
+
+.achievement-icon {
+    font-size: 18px;
+}
+
+.achievement-name {
+    font-size: 14px;
+}
+
+/* Animations */
+@keyframes tooltipSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes demoSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes tutorialPulse {
+    0%, 100% { 
+        box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.3), 
+                    0 0 0 9999px rgba(0, 0, 0, 0.6);
+    }
+    50% { 
+        box-shadow: 0 0 0 8px rgba(76, 175, 80, 0.6), 
+                    0 0 0 9999px rgba(0, 0, 0, 0.6);
+    }
+}
+
+@keyframes starGlow {
+    0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+}
+
+@keyframes progressGlow {
+    0%, 100% { box-shadow: 0 0 15px rgba(76, 175, 80, 0.5); }
+    50% { box-shadow: 0 0 25px rgba(76, 175, 80, 0.8); }
+}
+
+@keyframes timerTick {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes hintGlow {
+    0%, 100% { 
+        box-shadow: 0 0 15px rgba(255, 193, 7, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 25px rgba(255, 193, 7, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+@keyframes restartSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes settingsBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes celebrationBounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tutorial-tooltip {
+        max-width: 90vw;
+        min-width: 280px;
+    }
+    
+    .tooltip-header h4 {
+        font-size: 16px;
+    }
+    
+    .tooltip-content p {
+        font-size: 14px;
+    }
+    
+    .tooltip-actions {
+        flex-direction: column;
+    }
+    
+    .tutorial-menu, .quick-tips, .tutorial-completion {
+        width: 95%;
+        max-width: none;
+    }
+    
+    .tutorial-menu-content, .quick-tips-content, .completion-content {
+        padding: 24px;
+    }
+    
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .completion-stats {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .ad-options {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .tutorial-tooltip {
+        min-width: 260px;
+    }
+    
+    .tooltip-header {
+        padding: 16px 20px 12px;
+    }
+    
+    .tooltip-content {
+        padding: 12px 20px;
+    }
+    
+    .tooltip-actions {
+        padding: 12px 20px 16px;
+    }
+    
+    .btn-skip, .btn-prev, .btn-next {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+}
