@@ -13,7 +13,18 @@ This guide will help you convert your HTML5 Ball Sort Puzzle game into an Androi
 - ✅ **Cloud Platform APIs Enabled**: Google Play Game Services & Management
 - ✅ **OAuth Consent Screen**: Configured
 - ✅ **Credentials**: Created
+- ✅ **Plugin Dependencies**: Fixed and updated for Cordova Android 12.0.1
+- ✅ **Modern Splash Screen**: Implemented (deprecated features removed)
 - 🔄 **Next Step**: Convert to Android project and test
+
+## ⚠️ Important Plugin Corrections Made
+
+**This guide has been updated with the correct plugin information:**
+
+- **AdMob Plugin**: `admob-plus-cordova@1.28.0` (NOT `cordova-admob-plus`)
+- **Games Services**: `cordova-plugin-play-games-services@1.1.2` (NOT `cordova-plugin-games-services`)
+- **Target Version**: Cordova Android 12.0.1 (stable, well-tested)
+- **Splash Screen**: Modern approach (old `<splash>` tags removed)
 
 ---
 
@@ -39,10 +50,19 @@ cordova --version
 ### 1.2 Install Missing Tools (If Needed)
 ```powershell
 # Install Cordova globally if not present
-npm install -g cordova
+npm install -g cordova@12.0.0
 
-# Install Android development tools
+# Install Android development tools (optional, but recommended)
 npm install -g @cordova/cli
+```
+
+### 1.3 Recommended Package.json DevDependencies
+```json
+"devDependencies": {
+  "cordova": "^12.0.0",
+  "cordova-android": "^12.0.1",
+  "cordova-res": "^0.15.4"
+}
 ```
 
 ---
@@ -106,12 +126,15 @@ cordova create . com.ballsortpuzzle.game "Ball Sort Puzzle"
 
 ### 3.3 Add Android Platform
 ```powershell
-# Add Android platform
-cordova platform add android@latest
+# Add specific stable Android platform version (recommended)
+cordova platform add android@12.0.1
+
+# Alternative: Add latest version (currently 14.0.1, but may have compatibility issues)
+# cordova platform add android@latest
 
 # Verify platform was added
 cordova platform list
-# Should show: android X.X.X
+# Should show: android 12.0.1
 ```
 
 ---
@@ -120,12 +143,12 @@ cordova platform list
 
 ### 4.1 Install Games Services Plugin
 ```powershell
-# Install the Google Play Games Services plugin
-cordova plugin add cordova-plugin-games-services --variable ANDROID_APP_ID=4973734059681006779
+# Install the Google Play Games Services plugin (CORRECTED PLUGIN NAME)
+cordova plugin add cordova-plugin-play-games-services --variable ANDROID_APP_ID=4973734059681006779
 
 # Verify plugin installation
 cordova plugin list
-# Should show: cordova-plugin-games-services
+# Should show: cordova-plugin-play-games-services
 ```
 
 ### 4.2 Install Additional Required Plugins
@@ -133,11 +156,14 @@ cordova plugin list
 # Install whitelist plugin (for security)
 cordova plugin add cordova-plugin-whitelist
 
-# Install device plugin (for device info)
-cordova plugin add cordova-plugin-device
+# Install device plugin (for device info) - Updated version
+cordova plugin add cordova-plugin-device@3.0.0
 
 # Install network information plugin
 cordova plugin add cordova-plugin-network-information
+
+# Install AdMob plugin (CORRECTED PLUGIN NAME)
+cordova plugin add admob-plus-cordova@1.28.0 --variable APP_ID_ANDROID=ca-app-pub-6091627587181077~2291249310
 ```
 
 ---
@@ -166,10 +192,17 @@ Ensure your `config.xml` includes these configurations:
     <preference name="ios-statusbarstyle" value="black-opaque" />
     <preference name="detect-data-types" value="true" />
     <preference name="exit-on-suspend" value="false" />
-    <preference name="show-splash-screen-spinner" value="true" />
-    <preference name="auto-hide-splash-screen" value="true" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="FadeSplashScreenDuration" value="300" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="3000" />
     <preference name="disable-cursor" value="false" />
-    <preference name="android-minSdkVersion" value="22" />
+    <preference name="android-minSdkVersion" value="23" />
+    <preference name="android-targetSdkVersion" value="34" />
+    <preference name="android-compileSdkVersion" value="34" />
     <preference name="android-installLocation" value="auto" />
     
     <!-- Allow all network access -->
@@ -194,18 +227,28 @@ Ensure your `config.xml` includes these configurations:
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
         
         <!-- Target SDK -->
-        <preference name="android-targetSdkVersion" value="33" />
+        <preference name="android-targetSdkVersion" value="34" />
     </platform>
     
-    <!-- Google Play Games Services Plugin -->
-    <plugin name="cordova-plugin-games-services" spec="^1.3.0">
+    <!-- AdMob Plugin (CORRECTED PLUGIN NAME) -->
+    <plugin name="admob-plus-cordova" spec="^1.28.0">
+        <variable name="APP_ID_ANDROID" value="ca-app-pub-6091627587181077~2291249310"/>
+    </plugin>
+    
+    <!-- Google Play Games Services Plugin (CORRECTED PLUGIN NAME) -->
+    <plugin name="cordova-plugin-play-games-services" spec="^1.1.2">
         <variable name="ANDROID_APP_ID" value="4973734059681006779" />
     </plugin>
     
     <!-- Other essential plugins -->
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
-    <plugin name="cordova-plugin-device" spec="^2.0.2" />
-    <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.5" />
+    <plugin name="cordova-plugin-device" spec="^3.0.0" />
+    <plugin name="cordova-plugin-network-information" spec="^3.0.0" />
+    <plugin name="cordova-plugin-splashscreen" spec="^6.0.2" />
+    <plugin name="cordova-plugin-statusbar" spec="^4.0.0" />
+    <plugin name="cordova-plugin-vibration" spec="^3.1.1" />
+    <plugin name="cordova-plugin-dialogs" spec="^2.0.2" />
+    <plugin name="cordova-plugin-file" spec="^8.1.3" />
 </widget>
 ```
 
@@ -607,6 +650,57 @@ Add this to your `index.html` before the closing `</body>` tag:
 
 ---
 
+## 📱 Step 7.3: Modern Splash Screen Setup (Cordova Android 12.0.1+)
+
+### 7.3.1 Important: Deprecated Features Removed
+**The old `<splash>` density tags are DEPRECATED in Cordova Android 12.0.1!**
+
+### 7.3.2 Modern Splash Screen Approach
+Your project now uses the modern splash screen system:
+
+#### Required Plugin:
+```xml
+<plugin name="cordova-plugin-splashscreen" spec="^6.0.2" />
+```
+
+#### Modern Splash Preferences:
+```xml
+<preference name="ShowSplashScreenSpinner" value="false" />
+<preference name="AutoHideSplashScreen" value="true" />
+<preference name="SplashMaintainAspectRatio" value="true" />
+<preference name="FadeSplashScreenDuration" value="300" />
+<preference name="SplashShowOnlyFirstTime" value="false" />
+<preference name="SplashScreen" value="screen" />
+<preference name="SplashScreenDelay" value="3000" />
+```
+
+#### Required Splash Images Directory Structure:
+```
+res/
+└── screen/
+    └── android/
+        ├── splash-land-hdpi.png      (800x480)
+        ├── splash-land-ldpi.png      (320x200)
+        ├── splash-land-mdpi.png      (480x320)
+        ├── splash-land-xhdpi.png     (1280x720)
+        ├── splash-land-xxhdpi.png    (1600x960)
+        ├── splash-land-xxxhdpi.png   (1920x1280)
+        ├── splash-port-hdpi.png      (480x800)
+        ├── splash-port-ldpi.png      (200x320)
+        ├── splash-port-mdpi.png      (320x480)
+        ├── splash-port-xhdpi.png     (720x1280)
+        ├── splash-port-xxhdpi.png    (960x1600)
+        └── splash-port-xxxhdpi.png   (1280x1920)
+```
+
+**Benefits of Modern Approach:**
+- ✅ Compatible with Cordova Android 12.0.1+
+- ✅ No deprecation warnings
+- ✅ Better performance
+- ✅ Automatic resource management
+
+---
+
 ## 🔨 Step 8: Build and Test Your Android Project
 
 ### 8.1 Build Debug APK
@@ -751,11 +845,51 @@ cordova build android --debug
 
 ### Plugin Issues
 ```powershell
-# If Games Services plugin isn't working
-cordova plugin remove cordova-plugin-games-services
-cordova plugin add cordova-plugin-games-services --variable ANDROID_APP_ID=4973734059681006779
+# If Games Services plugin isn't working (CORRECTED PLUGIN NAME)
+cordova plugin remove cordova-plugin-play-games-services
+cordova plugin add cordova-plugin-play-games-services@1.1.2 --variable ANDROID_APP_ID=4973734059681006779
 cordova clean android
 cordova build android --debug
+```
+
+### Common Plugin Errors and Solutions
+
+#### "no matching version found for cordova-admob-plus@^2.0.0"
+**Problem**: Wrong package name or version
+**Solution**:
+```powershell
+# Remove the problematic plugin
+cordova plugin remove cordova-admob-plus
+
+# Install correct plugin with stable version
+cordova plugin add admob-plus-cordova@1.28.0 --variable APP_ID_ANDROID=ca-app-pub-6091627587181077~2291249310
+
+# Clean cache
+npm cache clean --force
+
+# Try platform add again
+cordova platform add android@12.0.1
+```
+
+#### "cordova-plugin-games-services not found"
+**Problem**: Plugin doesn't exist on npm
+**Solution**:
+```powershell
+# Use the correct plugin name
+cordova plugin add cordova-plugin-play-games-services@1.1.2 --variable ANDROID_APP_ID=4973734059681006779
+```
+
+#### Platform Add Fails with Plugin Dependencies
+**Solution**:
+```powershell
+# Add platform without restoring plugins
+cordova platform add android@12.0.1 --no-restore
+
+# Then manually add plugins one by one
+cordova plugin add cordova-plugin-whitelist
+cordova plugin add cordova-plugin-splashscreen
+cordova plugin add admob-plus-cordova@1.28.0 --variable APP_ID_ANDROID=ca-app-pub-6091627587181077~2291249310
+cordova plugin add cordova-plugin-play-games-services@1.1.2 --variable ANDROID_APP_ID=4973734059681006779
 ```
 
 ---

@@ -16,7 +16,7 @@
     "remove-android": "cordova platform remove android",
     "install-plugins": "npm run install-cordova-plugins && npm run install-admob && npm run install-play-games",
     "install-cordova-plugins": "cordova plugin add cordova-plugin-whitelist cordova-plugin-splashscreen cordova-plugin-statusbar cordova-plugin-device cordova-plugin-network-information cordova-plugin-vibration cordova-plugin-dialogs cordova-plugin-file",
-    "install-admob": "cordova plugin add cordova-admob-plus --variable APP_ID_ANDROID=ca-app-pub-XXXXXXXXXXXXXXXX~YYYYYYYYYY",
+    "install-admob": "cordova plugin add admob-plus-cordova --variable APP_ID_ANDROID=ca-app-pub-XXXXXXXXXXXXXXXX~YYYYYYYYYY",
     "install-play-games": "cordova plugin add cordova-plugin-games-services --variable ANDROID_APP_ID=YOUR_GOOGLE_PLAY_GAMES_APP_ID",
     "setup-android": "npm run add-android && npm run install-plugins",
     "generate-icons": "cordova-res android --skip-config --copy",
@@ -42,11 +42,11 @@
     "cordova-res": "^0.15.4"
   },
   "dependencies": {
-    "cordova-admob-plus": "^2.0.0",
-    "cordova-plugin-device": "^2.1.0",
+    "admob-plus-cordova": "^1.28.0",
+    "cordova-plugin-device": "^3.0.0",
     "cordova-plugin-dialogs": "^2.0.2",
-    "cordova-plugin-file": "^8.0.0",
-    "cordova-plugin-games-services": "^1.3.0",
+    "cordova-plugin-file": "^8.1.3",
+    "cordova-plugin-play-games-services": "^1.1.2",
     "cordova-plugin-network-information": "^3.0.0",
     "cordova-plugin-splashscreen": "^6.0.2",
     "cordova-plugin-statusbar": "^4.0.0",
@@ -66,10 +66,10 @@
       "cordova-plugin-vibration": {},
       "cordova-plugin-dialogs": {},
       "cordova-plugin-file": {},
-      "cordova-admob-plus": {
+      "admob-plus-cordova": {
         "APP_ID_ANDROID": "ca-app-pub-6091627587181077~2291249310"
       },
-      "cordova-plugin-games-services": {
+      "cordova-plugin-play-games-services": {
         "ANDROID_APP_ID": "4973734059681006779"
       }
     }
