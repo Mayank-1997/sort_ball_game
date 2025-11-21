@@ -1,0 +1,17 @@
+// build-extras.gradle - Force consistent Play Services versions
+
+android {
+    configurations.all {
+        resolutionStrategy {
+            // Force use of newer Play Services Games version
+            force 'com.google.android.gms:play-services-games:24.0.0'
+            // Exclude the conflicting v2 version
+            exclude group: 'com.google.android.gms', module: 'play-services-games-v2'
+        }
+    }
+}
+
+// Alternative approach - exclude duplicates
+configurations {
+    all*.exclude group: 'com.google.android.gms', module: 'play-services-games-v2'
+}

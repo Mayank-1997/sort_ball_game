@@ -84,6 +84,7 @@
     <!-- Google Play Games Services -->
     <plugin name="cordova-plugin-play-games-services" spec="^1.1.2">
         <variable name="ANDROID_APP_ID" value="4973734059681006779" />
+        <variable name="PLAY_SERVICES_VERSION" value="24.0.0" />
     </plugin>
     
     <!-- Content Security Policy -->
